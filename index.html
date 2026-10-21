@@ -41,10 +41,14 @@
   <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.18/dist/lenis.min.js"></script>
 
   <style>
-    :root { --ease: cubic-bezier(0.22, 1, 0.36, 1); }
-    html { scroll-padding-top: 5.5rem; }
+    :root { --ease: cubic-bezier(0.22, 1, 0.36, 1); --launch-banner-height: 5.5rem; }
+    html { scroll-padding-top: calc(5.5rem + var(--launch-banner-height)); }
     body { font-family: 'Inter', ui-sans-serif, system-ui, sans-serif; }
     ::selection { background: #D97706; color: #fff; }
+
+    @media (min-width: 768px) {
+      :root { --launch-banner-height: 2.75rem; }
+    }
 
     /* Lenis */
     html.lenis, html.lenis body { height: auto; }
@@ -113,6 +117,9 @@
 
     /* Ombre du header au scroll */
     #site-header.is-scrolled { box-shadow: 0 12px 32px -14px rgb(15 23 42 / .18); }
+    #share-vip-button[hidden] { display: none; }
+    .share-vip-unlocked:not([hidden]) { animation: shareUnlock .7s var(--ease) both; }
+    @keyframes shareUnlock { from { opacity: 0; transform: translateY(16px) scale(.97); } to { opacity: 1; transform: translateY(0) scale(1); } }
 
     /* Comparateur Avant / Après */
     .ba-after { clip-path: inset(0 0 0 var(--split, 50%)); }
@@ -130,14 +137,26 @@
       .reveal { opacity: 1; transform: none; transition: none; }
       .mask-line > span, .hero-fade { animation: none; transform: none; opacity: 1; }
       .marquee-track, .animate-floaty, .animate-spin-slow, .pulse-ring::before { animation: none; }
+      .share-vip-unlocked:not([hidden]) { animation: none; }
     }
   </style>
 </head>
 
 <body class="bg-white font-sans text-night antialiased">
 
+  <!-- ================= BANDEAU DE LANCEMENT ================= -->
+  <div class="fixed inset-x-0 top-0 z-[60] flex min-h-[var(--launch-banner-height)] items-center justify-center border-b border-amber-500/30 bg-gradient-to-r from-slate-950 via-slate-900 to-emerald-950 px-4 py-2.5 text-sm text-slate-100">
+    <div class="mx-auto flex w-full max-w-7xl flex-wrap items-center justify-center gap-3 text-sm">
+      <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/20 px-2.5 py-0.5 text-xs font-semibold text-amber-300">
+        <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-400" aria-hidden="true"></span> 🟢 En direct : 96 / 100 places réservées (Plus que 14 disponibles)
+      </span>
+      <p class="text-center font-medium text-slate-100">LANCEMENT OFFICIEL DAA 2026 : 100 Bourses VIP offertes pour digitaliser votre activité !</p>
+      <a href="#bourse-vip" class="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 px-3.5 py-1 text-xs font-bold text-slate-950 shadow-sm transition-all duration-200 hover:scale-105 hover:from-amber-400 hover:to-amber-500 active:scale-95">Réclamer ma place <span aria-hidden="true">→</span></a>
+    </div>
+  </div>
+
   <!-- ================= EN-TÊTE ================= -->
-  <header id="site-header" class="fixed inset-x-0 top-0 z-50 border-b border-slate-900/5 bg-white/80 backdrop-blur-md transition-shadow duration-300">
+  <header id="site-header" style="top:var(--launch-banner-height)" class="fixed inset-x-0 z-50 border-b border-slate-900/5 bg-white/80 backdrop-blur-md transition-shadow duration-300">
     <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:h-20 sm:px-8">
       <a href="#accueil" data-testid="nav-logo-link" class="flex items-center gap-3">
         <img src="images/logo.png" alt="Logo DAA" class="h-10 w-auto">
@@ -189,7 +208,7 @@
 
   <main>
     <!-- ================= HERO ================= -->
-    <section id="accueil" class="bg-grid relative overflow-hidden bg-white pt-28 sm:pt-36">
+    <section id="accueil" class="bg-grid relative overflow-hidden bg-white pt-40 sm:pt-36">
       <div class="pointer-events-none absolute -top-32 right-0 h-[28rem] w-[28rem] rounded-full bg-primary/10 blur-3xl"></div>
       <div class="pointer-events-none absolute bottom-0 left-0 h-64 w-64 rounded-full bg-gold/10 blur-3xl"></div>
 
@@ -271,6 +290,41 @@
             <div class="animate-floaty absolute bottom-6 left-2 flex items-center gap-2 rounded-xl bg-night px-3.5 py-2 text-xs font-bold text-white shadow-lg" style="--d:2s">
               <i class="fa-solid fa-users text-primary"></i> 85+ commerces digitalisés
             </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ================= BOURSE D'ACCÈS VIP ================= -->
+    <section id="bourse-vip" class="bg-mist px-5 py-16 sm:px-8 sm:py-20">
+      <div class="reveal mx-auto max-w-5xl rounded-3xl border border-gold/40 bg-night px-6 py-9 text-white shadow-2xl shadow-night/15 sm:px-10 sm:py-12">
+        <div class="mx-auto max-w-3xl text-center">
+          <p class="text-xs font-bold uppercase tracking-[0.25em] text-gold">Initiative d'Inclusion Numérique</p>
+          <h2 class="mt-4 text-3xl font-black leading-tight sm:text-4xl">Débloquez votre Bourse d'Accès VIP à la Masterclass Gratuite</h2>
+          <p class="mt-4 text-base font-semibold leading-relaxed text-emerald-300 sm:text-lg">Vendre &amp; Automatiser sur WhatsApp grâce à l'IA (Valeur : 25 000 FCFA — Offert pour le lancement).</p>
+          <p class="mt-5 text-sm leading-relaxed text-slate-300 sm:text-base">Dans le cadre de l'Initiative d'Inclusion Numérique, soutenez 3 commerçants ou artisans de votre entourage en leur partageant cette opportunité pour débloquer votre accès officiel.</p>
+        </div>
+
+        <div class="mx-auto mt-8 max-w-2xl">
+          <div class="flex items-center justify-between gap-3 text-sm font-bold text-white" id="share-progress-label">
+            <span>Progression</span>
+            <span><span id="share-count">0</span> / 3 invitations envoyées</span>
+          </div>
+          <div id="share-progress" class="mt-3 h-3 overflow-hidden rounded-full bg-white/15" role="progressbar" aria-labelledby="share-progress-label" aria-valuemin="0" aria-valuemax="3" aria-valuenow="0">
+            <div id="share-progress-bar" class="h-full w-0 rounded-full bg-primary transition-[width] duration-500"></div>
+          </div>
+
+          <div class="mt-7 flex flex-col items-center gap-4">
+            <button type="button" id="share-invite-button" class="inline-flex w-full items-center justify-center rounded-xl bg-primary px-5 py-4 text-center text-sm font-extrabold text-white shadow-lg shadow-primary/25 transition-[transform,background-color] duration-300 hover:scale-[1.02] hover:bg-primarydark sm:text-base">
+              <i class="fa-brands fa-whatsapp mr-2.5 text-xl" aria-hidden="true"></i>Inviter un entrepreneur sur WhatsApp (+1)
+            </button>
+            <a id="share-vip-button" href="https://chat.whatsapp.com/HE27sT0Ub6lDinv1FR3SW8?s=cl&p=a&ilr=1" target="_blank" rel="noopener noreferrer" hidden class="share-vip-unlocked inline-flex w-full items-center justify-center rounded-xl bg-gradient-to-r from-gold to-primary px-5 py-5 text-center text-base font-black text-white shadow-xl shadow-gold/20 transition-transform duration-300 hover:scale-[1.02] sm:text-lg">
+              🎉 Félicitations ! Rejoindre le Salon WhatsApp VIP
+            </a>
+            <p class="text-center text-xs leading-relaxed text-slate-400 sm:text-sm">
+              Déjà inscrit ou vous souhaitez un accompagnement privé direct ?
+              <a href="https://wa.me/2250544188155" target="_blank" rel="noopener noreferrer" class="font-semibold text-emerald-300 underline decoration-emerald-300/50 underline-offset-2 hover:text-white">Cliquez ici pour contacter la direction.</a>
+            </p>
           </div>
         </div>
       </div>
@@ -1140,10 +1194,52 @@
         if (!target) return;
         e.preventDefault();
         closeMobileMenu();
-        if (lenis) lenis.scrollTo(target, { offset: -88 });
+          if (lenis) {
+            const bannerHeight = parseFloat(getComputedStyle(document.documentElement).getPropertyValue('--launch-banner-height')) || 0;
+            lenis.scrollTo(target, { offset: -(88 + bannerHeight) });
+          }
         else target.scrollIntoView({ behavior: 'smooth', block: 'start' });
       });
     });
+
+      /* ===== Partage pour débloquer la bourse VIP ===== */
+      const shareCountElement = document.getElementById('share-count');
+      const shareProgress = document.getElementById('share-progress');
+      const shareProgressBar = document.getElementById('share-progress-bar');
+      const shareInviteButton = document.getElementById('share-invite-button');
+      const shareVipButton = document.getElementById('share-vip-button');
+      const shareStorageKey = 'daa_share_count';
+      const shareInviteUrl = "https://api.whatsapp.com/send?text=Salut%20!%20Je%20viens%20de%20r%C3%A9server%20ma%20place%20pour%20la%20formation%20offerte%20de%20la%20Digital%20Artisans%20Academy%20sur%20l%27automatisation%20WhatsApp%20et%20l%27IA.%20Ils%20offrent%20quelques%20acc%C3%A8s%20pour%20les%20commer%C3%A7ants.%20Profites-en%20aussi%20ici%20:%20https://digitalartisansacademy.vercel.app";
+      let shareCount = 0;
+      try {
+        const storedShareCount = Number.parseInt(localStorage.getItem(shareStorageKey) || '0', 10);
+        shareCount = Number.isFinite(storedShareCount) ? Math.min(3, Math.max(0, storedShareCount)) : 0;
+      } catch (error) {
+        shareCount = 0;
+      }
+
+      function updateShareProgress() {
+        shareCountElement.textContent = String(shareCount);
+        shareProgress.setAttribute('aria-valuenow', String(shareCount));
+        shareProgressBar.style.width = (shareCount / 3 * 100) + '%';
+        const unlocked = shareCount >= 3;
+        shareInviteButton.hidden = unlocked;
+        shareVipButton.hidden = !unlocked;
+      }
+
+      updateShareProgress();
+      shareInviteButton.addEventListener('click', () => {
+        window.open(shareInviteUrl, '_blank', 'noopener,noreferrer');
+        if (shareCount < 3) {
+          shareCount += 1;
+          try {
+            localStorage.setItem(shareStorageKey, String(shareCount));
+          } catch (error) {
+            // Le compteur reste utilisable pour cette session si le stockage est indisponible.
+          }
+          updateShareProgress();
+        }
+      });
 
     /* ===== Révélations au scroll ===== */
     const observer = new IntersectionObserver((entries) => {
