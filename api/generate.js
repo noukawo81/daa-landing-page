@@ -1,97 +1,64 @@
-// api/generate.js — Relais serveur sécurisé DAA spécial Hackathon Meta
 export default async function handler(req, res) {
+  // N'autoriser que les requêtes POST
   if (req.method !== 'POST') {
-    return res.status(405).json({ error: 'Méthode POST requise' });
+    return res.status(405).json({ error: 'Méthode non autorisée' });
   }
 
-  try {
-    const { mode, productName, prompt, imageBase64, actionType } = req.body;
+  const { productName, prompt, imageBase64, mode } = req.body;
 
-    const META_API_KEY = process.env.META_MODEL_API_KEY;
-    const FIREWORKS_API_KEY = process.env.FIREWORKS_API_KEY;
-    const BASETEN_API_KEY = process.env.BASETEN_API_KEY;
+  const basetenKey = process.env.BASETEN_API_KEY;
+  const metaKey = process.env.META_MODEL_API_KEY;
 
-    let generatedText = "";
-    let generatedImageUrl = "";
+  let salesCopy = 'Découvrez notre création artisanale d\'exception, conçue avec soin et authenticité par nos artisans partenaires.';
 
-    // 1. RÉDACTION COMMERCIALE (META LLAMA 3.1)
-    if (FIREWORKS_API_KEY || BASETEN_API_KEY) {
-      try {
-        const endpoint = FIREWORKS_API_KEY 
-          ? "https://api.fireworks.ai/inference/v1/chat/completions"
-          : "https://model-api.baseten.co/v1/chat/completions";
+  // 1. Appel du modèle de texte Llama / Muse Spark via Baseten
+  if (basetenKey) {
+    try {
+      const basetenResponse = await fetch('https://bridge.baseten.co/v1/chat/completions', {
+        method: 'POST',
+        headers: {
+          'Authorization': `Api-Key ${basetenKey.trim()}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          model: 'meta-models/muse-spark-open-1026',
+          messages: [
+            {
+              role: 'system',
+              content: 'Tu es un expert en copywriting e-commerce pour les créateurs et artisans d\'Afrique de l\'Ouest. Rédige un texte court, séduisant et percutant adapté pour WhatsApp et Instagram, avec des émojis et le prix en FCFA.'
+            },
+            {
+              role: 'user',
+              content: `Produit: ${productName || 'Création artisanale'}. Souhaits de mise en avant: ${prompt || 'Mise en valeur haut de gamme'}.`
+            }
+          ],
+          max_tokens: 250
+        })
+      });
 
-        const auth = FIREWORKS_API_KEY ? `Bearer ${FIREWORKS_API_KEY}` : `Api-Key ${BASETEN_API_KEY}`;
-
-        const llamaResponse = await fetch(endpoint, {
-          method: "POST",
-          headers: {
-            "Authorization": auth,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: "accounts/fireworks/models/llama-v3p1-8b-instruct",
-            messages: [
-              {
-                role: "system",
-                content: "Tu es le moteur marketing IA de la Digital Artisans Academy (DAA). Rédige une fiche de vente persuasive pour artisans et PME en Côte d'Ivoire. Reste concis : 1 titre percutant, 2 phrases de valeur, prix indicatif en FCFA et un appel à l'action WhatsApp."
-              },
-              {
-                role: "user",
-                content: `Produit : ${productName || 'Création artisanale'}. Souhaits du créateur : ${prompt || 'Finition luxe'}.`
-              }
-            ],
-            max_tokens: 220,
-            temperature: 0.7
-          })
-        });
-
-        const llamaData = await llamaResponse.json();
-        if (llamaData.choices && llamaData.choices[0]) {
-          generatedText = llamaData.choices[0].message.content;
+      if (basetenResponse.ok) {
+        const textData = await basetenResponse.json();
+        if (textData.choices && textData.choices[0]?.message?.content) {
+          salesCopy = textData.choices[0].message.content;
         }
-      } catch (err) {
-        console.warn("Secours Llama local activé :", err);
+      } else {
+        const errorText = await basetenResponse.text();
+        console.warn('Réponse Baseten non-OK:', basetenResponse.status, errorText);
       }
+    } catch (apiError) {
+      console.error('Erreur appel Baseten:', apiError);
     }
-
-    // 2. GÉNÉRATION OU RETOUCHE VISUELLE (META MODEL API : SAM 3.1 / MUSE IMAGE)
-    if (META_API_KEY) {
-      try {
-        // Text-to-Image (Muse Image) ou Segmentation de produit (SAM 3.1)
-        const metaResponse = await fetch("https://api.meta.ai/v1/images/generations", {
-          method: "POST",
-          headers: {
-            "Authorization": `Bearer ${META_API_KEY}`,
-            "Content-Type": "application/json"
-          },
-          body: JSON.stringify({
-            model: "muse-image-1.0",
-            prompt: `High-end commercial product photography of ${productName || 'African artisan product'}, ${prompt}, professional luxury studio lighting, 8k resolution, photorealistic`,
-            response_format: "url"
-          })
-        });
-
-        const metaData = await metaResponse.json();
-        if (metaData.data && metaData.data[0]) {
-          generatedImageUrl = metaData.data[0].url;
-        }
-      } catch (err) {
-        console.warn("Secours graphique activé :", err);
-      }
-    }
-
-    // Réponse de secours propre et structurée
-    const defaultText = `${productName || 'Votre Produit'}\n\nUne création authentique, soignée et pensée pour valoriser votre savoir-faire.\n\nPrix : Sur mesure en FCFA\nCommande & Livraison : écrivez-nous sur WhatsApp au +225 05 44 18 81 55`;
-
-    return res.status(200).json({
-      success: true,
-      text: generatedText || defaultText,
-      imageUrl: generatedImageUrl || null
-    });
-
-  } catch (error) {
-    console.error("Erreur serveur :", error);
-    return res.status(500).json({ error: "Erreur interne de traitement" });
   }
+
+  // 2. Gestion du visuel (renvoie la photo uploadée ou un modèle de démonstration haute définition)
+  const visualUrl = imageBase64 
+    ? imageBase64 
+    : 'https://images.unsplash.com/photo-1608248597359-56135212574e?auto=format&fit=crop&w=800&q=80';
+
+  // 3. Réponse 200 avec succès garanti pour l'interface utilisateur
+  return res.status(200).json({
+    success: true,
+    visualUrl: visualUrl,
+    salesCopy: salesCopy
+  });
 }
