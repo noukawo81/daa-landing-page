@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="fr" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#0B1120">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 40 40'%3E%3Crect width='40' height='40' rx='9' fill='%230B1120'/%3E%3Cpath d='M17 6L10 9.5 6 16l-1 7 3 6 5 4 4 .5Z' fill='none' stroke='%2334D399' stroke-width='1.8' stroke-linejoin='round'/%3E%3Cpath d='M22 8v6l-2 3v8l2 3v4' fill='none' stroke='%23CBD5E1' stroke-width='1.8' stroke-linecap='round' stroke-linejoin='round'/%3E%3Ccircle cx='29' cy='13' r='2.2' fill='%2334D399'/%3E%3Ccircle cx='29' cy='27' r='2.2' fill='%2334D399'/%3E%3C/svg%3E">
+  <title>DAA AI Studio — Visuels produits prêts à vendre</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script>
+    // Palette reprise de la landing page DAA
+    tailwind.config = {
+      theme: { extend: {
+        fontFamily: { sans: ['Inter', 'system-ui', 'sans-serif'] },
+        colors: {
+          navy: '#0F172A',      // bandeau + titres
+          night: '#0B1120',     // fond le plus sombre du bandeau
+          emerald: { DEFAULT: '#059669', dark: '#047857' }, // boutons "Commander"
+          gold: { DEFAULT: '#F59E0B', deep: '#D97706', soft: '#FBBF24' }, // CTA + texte du bandeau
+          mint: '#A7D8C5'       // bordure des cartes
+        }
+      } }
+    }
+  </script>
+  <style>
+    .card { background:#fff; border:1.5px solid #A7D8C5; border-radius:1.25rem; }
+    @keyframes nudge { 0%,100% { transform: translateX(0); } 50% { transform: translateX(4px); } }
+    .arrow-nudge { animation: nudge 1.6s ease-in-out infinite; }
+    .group:hover .arrow-nudge { animation: none; }
+    @media (prefers-reduced-motion: reduce) { .arrow-nudge { animation: none; } }
+    :focus-visible { outline:3px solid #F59E0B; outline-offset:2px; }
+  </style>
+</head>
+<body class="bg-slate-50 text-navy font-sans min-h-screen flex flex-col selection:bg-emerald selection:text-white">
+
+  <!-- En-tête : même bandeau sombre et or que la landing -->
+  <header class="sticky top-0 z-40 bg-gradient-to-b from-night to-navy border-b border-gold-deep/50 px-4 py-3">
+    <div class="max-w-6xl mx-auto flex items-center justify-between gap-3">
+      <a href="index.html" class="flex items-center gap-2.5 text-white font-bold hover:text-gold-soft transition" aria-label="Retour à l’accueil DAA">
+        <svg width="36" height="36" viewBox="0 0 40 40" fill="none" class="w-9 h-9 shrink-0" aria-hidden="true">
+          <defs><linearGradient id="daaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5EEAD4"/><stop offset="1" stop-color="#059669"/></linearGradient></defs>
+          <g stroke="url(#daaG)" stroke-width="1.3" stroke-linejoin="round" stroke-linecap="round">
+            <path d="M17 3L9.5 6.5 4 14.5 3 22.5 6 30 12 36 17 37.5Z"/>
+            <path d="M9.5 6.5L13 14 4 14.5M13 14L17 3M13 14L11 22 3 22.5M11 22L17 17M11 22L16 29 6 30M16 29L17 37.5M16 29L12 36"/>
+          </g>
+          <g stroke="#CBD5E1" stroke-width="1.3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M22 6V13L20 15.5V25L22 27.5V34"/>
+            <path d="M20.5 17.5L22.5 19.5H28L30 17.5M22 27.5L25.5 30H31"/>
+            <circle cx="22" cy="4" r="2"/><circle cx="22" cy="36" r="2"/>
+          </g>
+          <g fill="#34D399">
+            <circle cx="27" cy="9" r="1.7"/><circle cx="31" cy="13.5" r="1.7"/><circle cx="33" cy="19.5" r="1.4" fill="none" stroke="#CBD5E1" stroke-width="1.2"/><circle cx="31" cy="30" r="1.7"/>
+          </g>
+          <path d="M27 10.7V13.5M27 13.5H24M31 15.2L29 17.5" stroke="#CBD5E1" stroke-width="1.1" stroke-linecap="round" fill="none"/>
+        </svg>
+        <span>DAA</span>
+        <span class="hidden sm:inline text-xs font-semibold px-2.5 py-0.5 rounded-full border border-gold-deep/60 text-gold-soft">Studio IA</span>
+      </a>
+      <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 px-3 py-1.5 rounded-full border border-gold-deep/60 bg-white/5">
+          <span class="w-2 h-2 rounded-full bg-emerald-400 animate-pulse"></span>
+          <span id="credits-badge" class="text-xs font-bold text-gold-soft" aria-live="polite">5 crédits</span>
+        </div>
+        <button type="button" onclick="openRechargeModal()" class="px-3.5 py-1.5 rounded-full bg-gradient-to-r from-gold to-gold-deep text-navy font-bold text-xs hover:brightness-110 transition">
+          <svg class="w-4 h-4 inline-block align-[-2px]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M11.3 1.046A1 1 0 0112 2v5h4a1 1 0 01.82 1.573l-7 10A1 1 0 018 18v-5H4a1 1 0 01-.82-1.573l7-10a1 1 0 011.12-.38z"/></svg> Recharger
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="max-w-6xl mx-auto w-full flex-1 px-4 py-6 sm:py-8 grid grid-cols-1 lg:grid-cols-12 gap-6">
+
+    <!-- Colonne gauche : réglages -->
+    <section class="lg:col-span-5 space-y-5">
+
+      <div class="card p-5">
+        <h2 class="font-bold text-base mb-3">1. Votre activité</h2>
+        <div class="grid grid-cols-3 gap-2" role="group" aria-label="Type d’activité">
+          <button type="button" id="btn-artisan" onclick="setMode('artisan')" class="mode-btn p-3 rounded-xl border-2 text-center transition">
+            <svg class="w-5 h-5 block mx-auto text-emerald mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/></svg>
+            <span class="text-sm font-bold block">Artisan</span>
+            <span class="text-xs text-slate-500">Carré 1:1</span>
+          </button>
+          <button type="button" id="btn-pme" onclick="setMode('pme')" class="mode-btn p-3 rounded-xl border-2 text-center transition">
+            <svg class="w-5 h-5 block mx-auto text-emerald mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 9l1.5-5h15L21 9M3 9h18M5 9v11h14V9M10 20v-5h4v5"/></svg>
+            <span class="text-sm font-bold block">Commerce</span>
+            <span class="text-xs text-slate-500">Bannière</span>
+          </button>
+          <button type="button" id="btn-enterprise" onclick="setMode('enterprise')" class="mode-btn p-3 rounded-xl border-2 text-center transition">
+            <svg class="w-5 h-5 block mx-auto text-emerald mb-1" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.75 21h16.5M4.5 3h15M5.25 3v18m13.5-18v18M9 6.75h1.5m-1.5 3h1.5m-1.5 3h1.5m3-6H15m-1.5 3H15m-1.5 3H15M9 21v-3.375c0-.621.504-1.125 1.125-1.125h3.75c.621 0 1.125.504 1.125 1.125V21"/></svg>
+            <span class="text-sm font-bold block">Entreprise</span>
+            <span class="text-xs text-slate-500">Affiche HD</span>
+          </button>
+        </div>
+      </div>
+
+      <div class="card p-5">
+        <h2 class="font-bold text-base mb-3">2. Votre création</h2>
+
+        <div id="tablist" class="grid grid-cols-3 gap-2 mb-4" role="tablist" aria-label="Mode de création">
+          <button type="button" role="tab" id="tab-photo" aria-selected="true" aria-controls="panel-photo" onclick="setTab('photo')" class="relative px-1 py-2.5 rounded-xl border-2 text-center transition border-emerald bg-emerald/10">
+            <span class="block text-lg leading-none" aria-hidden="true">📸</span>
+            <span class="block text-xs font-bold mt-1 text-slate-900">Photo Produit</span>
+          </button>
+          <button type="button" role="tab" id="tab-text" aria-selected="false" aria-controls="panel-text" tabindex="-1" onclick="setTab('text')" class="relative px-1 py-2.5 rounded-xl border-2 text-center transition border-slate-200 hover:border-mint">
+            <span class="block text-lg leading-none" aria-hidden="true">✨</span>
+            <span class="block text-xs font-bold mt-1 text-slate-900">Description Texte</span>
+          </button>
+          <button type="button" role="tab" id="tab-video" aria-selected="false" aria-controls="panel-video" tabindex="-1" onclick="setTab('video')" class="relative px-1 py-2.5 rounded-xl border-2 text-center transition border-slate-200 hover:border-mint">
+            <span class="absolute -top-2 right-1 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-gradient-to-r from-gold to-gold-deep text-navy shadow-sm">Bientôt</span>
+            <span class="block text-lg leading-none" aria-hidden="true">🎬</span>
+            <span class="block text-xs font-bold mt-1 text-slate-900">Vidéo Promo IA</span>
+          </button>
+        </div>
+
+        <!-- Onglet 1 : photo -->
+        <div id="panel-photo" role="tabpanel" aria-labelledby="tab-photo">
+          <input type="file" id="file-gallery" class="hidden" accept="image/*" onchange="handlePick(event)">
+          <input type="file" id="file-camera" class="hidden" accept="image/*" capture="environment" onchange="handlePick(event)">
+
+          <!-- État 1 : choisir -->
+          <div id="photo-choose" class="border-2 border-dashed border-mint rounded-xl p-5 bg-emerald/5 text-center transition">
+            <p class="text-sm font-semibold text-slate-800">Ajoutez la photo de votre produit</p>
+            <p class="text-xs text-slate-500 mt-1 mb-4">Vêtement, savon, sac, chaussure, plat ou objet</p>
+            <div class="grid grid-cols-2 gap-3">
+              <button type="button" onclick="document.getElementById('file-gallery').click()" class="flex flex-col items-center gap-2 py-4 px-2 rounded-xl border-2 border-mint bg-white hover:border-emerald transition">
+                <span class="w-12 h-12 rounded-full bg-emerald/10 text-emerald flex items-center justify-center"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg></span>
+                <span class="text-sm font-bold text-slate-900">Galerie</span>
+              </button>
+              <button type="button" onclick="document.getElementById('file-camera').click()" class="flex flex-col items-center gap-2 py-4 px-2 rounded-xl border-2 border-mint bg-white hover:border-emerald transition">
+                <span class="w-12 h-12 rounded-full bg-emerald/10 text-emerald flex items-center justify-center"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.827 6.175A2.31 2.31 0 015.186 7.23c-.38.054-.757.112-1.134.175C2.999 7.58 2.25 8.507 2.25 9.574V18a2.25 2.25 0 002.25 2.25h15A2.25 2.25 0 0021.75 18V9.574c0-1.067-.75-1.994-1.802-2.169a47.865 47.865 0 00-1.134-.175 2.31 2.31 0 01-1.64-1.055l-.822-1.316a2.192 2.192 0 00-1.736-1.039 48.774 48.774 0 00-5.232 0 2.192 2.192 0 00-1.736 1.039l-.821 1.316z"/><path d="M16.5 12.75a4.5 4.5 0 11-9 0 4.5 4.5 0 019 0z"/></svg></span>
+                <span class="text-sm font-bold text-slate-900">Prendre une photo</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- État 2 : aperçu à valider -->
+          <div id="photo-review" class="hidden">
+            <div class="relative rounded-xl overflow-hidden border border-mint bg-slate-100">
+              <img id="review-img" alt="Aperçu de la photo choisie" class="block w-full max-h-72 object-contain mx-auto pb-16">
+              <div class="absolute bottom-3 inset-x-5 flex items-center justify-between">
+                <button type="button" onclick="discardPhoto()" aria-label="Supprimer la photo et recommencer" class="w-12 h-12 rounded-full bg-red-600 hover:bg-red-700 text-white ring-4 ring-white shadow-lg flex items-center justify-center transition"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 18L18 6M6 6l12 12"/></svg></button>
+                <button type="button" onclick="validatePhoto()" aria-label="Valider cette photo" class="w-12 h-12 rounded-full bg-emerald hover:bg-emerald-dark text-white ring-4 ring-white shadow-lg flex items-center justify-center transition"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.75l6 6 9-13.5"/></svg></button>
+              </div>
+            </div>
+            <p class="text-xs text-slate-500 text-center mt-2">Photo ratée ? Appuyez sur ✕ pour recommencer. Sinon, validez avec ✓.</p>
+          </div>
+
+          <!-- État 3 : photo validée -->
+          <div id="photo-validated" class="hidden">
+            <div class="flex items-center gap-3 p-3 rounded-xl border-2 border-emerald bg-emerald/5">
+              <img id="validated-thumb" alt="Photo validée" class="w-16 h-16 rounded-lg object-cover border border-mint bg-white">
+              <div class="flex-1 min-w-0">
+                <p class="text-sm font-bold text-emerald flex items-center gap-1"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 12.75l6 6 9-13.5"/></svg><span>Photo validée</span></p>
+                <p class="text-xs text-slate-500">Elle est affichée dans votre espace de travail.</p>
+              </div>
+              <button type="button" onclick="discardPhoto()" class="text-xs font-semibold text-red-600 hover:underline shrink-0">Changer</button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Onglet 2 : description texte -->
+        <div id="panel-text" role="tabpanel" aria-labelledby="tab-text" class="hidden">
+          <label for="prompt-input" class="block text-sm text-slate-600 mb-1">Décrivez le produit ou le visuel que vous imaginez</label>
+          <div class="relative" data-field>
+            <textarea id="prompt-input" rows="4" maxlength="400" placeholder="Ex : une paire de chaussures en cuir marron avec des motifs en pagne kita, posée sur une table en bois, lumière douce de studio" class="w-full border border-slate-300 rounded-2xl px-3 pt-2.5 pb-14 text-sm focus:outline-none focus:border-emerald resize-none"></textarea>
+            <span data-listening class="hidden absolute bottom-5 left-3 text-xs font-medium text-slate-500 animate-pulse">● Écoute en cours...</span>
+            <div class="absolute bottom-2 right-2 flex items-center gap-1">
+              <button type="button" data-mic id="mic-prompt-input" onclick="toggleMic('prompt-input', this)" aria-label="Dicter avec le micro" aria-pressed="false" class="relative w-10 h-10 rounded-full text-slate-900 hover:bg-slate-100 flex items-center justify-center transition">
+                <span data-ring class="hidden absolute inset-1 rounded-full bg-slate-400/40 animate-ping"></span>
+                <span class="relative"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/></svg></span>
+              </button>
+              <button type="button" onclick="launchGeneration()" aria-label="Envoyer et lancer la transformation" class="w-10 h-10 rounded-full bg-[#3366F0] hover:bg-[#2A58D8] text-white flex items-center justify-center shadow-sm transition"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"/></svg></button>
+            </div>
+          </div>
+          <p id="note-prompt-input" class="hidden text-xs text-slate-500 mt-1" role="status"></p>
+          <p class="text-xs text-slate-500 mt-1 mb-3">Plus la description est précise (matière, couleurs, ambiance), meilleur sera le résultat.</p>
+          <p class="text-xs font-semibold text-slate-600 mb-2">Suggestions rapides</p>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="useSuggestion(this)" class="px-3 py-1.5 rounded-full border border-mint bg-emerald/5 hover:bg-emerald/10 text-xs font-semibold text-emerald transition">Chaussure cuir et pagne kita</button>
+            <button type="button" onclick="useSuggestion(this)" class="px-3 py-1.5 rounded-full border border-mint bg-emerald/5 hover:bg-emerald/10 text-xs font-semibold text-emerald transition">Flacon cosmétique de luxe</button>
+            <button type="button" onclick="useSuggestion(this)" class="px-3 py-1.5 rounded-full border border-mint bg-emerald/5 hover:bg-emerald/10 text-xs font-semibold text-emerald transition">Savon artisanal sur bois noble</button>
+          </div>
+        </div>
+
+        <!-- Onglet 3 : vidéo (à venir) -->
+        <div id="panel-video" role="tabpanel" aria-labelledby="tab-video" class="hidden">
+          <div class="rounded-xl border border-gold-deep/50 bg-gradient-to-b from-night to-navy p-5 text-center text-white">
+            <div class="relative mx-auto w-28 aspect-[9/16] rounded-2xl border-2 border-gold-deep/60 bg-gradient-to-br from-emerald/50 via-navy to-night shadow-lg flex items-center justify-center overflow-hidden" aria-hidden="true">
+              <span class="absolute top-2 left-2 text-[10px] font-bold px-1.5 py-0.5 rounded bg-black/50 text-gold-soft">10 s</span>
+              <span class="w-11 h-11 rounded-full bg-white/90 text-navy flex items-center justify-center"><svg class="w-5 h-5 ml-0.5" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></span>
+              <span class="absolute bottom-2 inset-x-2 h-1 rounded-full bg-white/20"><span class="block h-full w-1/3 rounded-full bg-gold"></span></span>
+            </div>
+            <h3 class="font-extrabold text-base mt-4">Vidéo publicitaire de 10 secondes</h3>
+            <p class="text-sm text-slate-300 mt-1">Votre produit en courte vidéo verticale, prête pour TikTok et Reels.</p>
+            <p class="inline-block mt-3 text-xs font-bold px-3 py-1 rounded-full border border-gold-deep/60 text-gold-soft">En cours de déploiement pour la V2</p>
+            <button type="button" onclick="notifyVideo()" class="mt-4 w-full py-3 bg-emerald hover:bg-emerald-dark text-white font-bold rounded-xl transition flex items-center justify-center gap-2">
+              <svg class="w-4 h-4 inline-block align-[-2px]" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg>
+              <span>Être notifié sur WhatsApp au lancement</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div id="step3" class="card p-5 space-y-4">
+        <h2 class="font-bold text-base text-slate-900">3. Mode de transformation</h2>
+        <div class="grid gap-2" role="group" aria-label="Mode de transformation">
+          <button type="button" id="smode-packaging" onclick="setSelectedMode('packaging')" aria-pressed="false" class="smode w-full flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 text-left transition">
+            <span class="w-10 h-10 shrink-0 rounded-lg bg-emerald/10 text-emerald flex items-center justify-center"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 7.5l-9-5.25L3 7.5m18 0l-9 5.25m9-5.25v9l-9 5.25M3 7.5l9 5.25M3 7.5v9l9 5.25m0-9v9"/></svg></span>
+            <span class="min-w-0"><span class="block text-sm font-bold text-slate-900">Packaging &amp; Retouche Luxe</span><span class="block text-xs text-slate-500">Détourage SAM 3.1 et décor premium</span></span>
+          </button>
+          <button type="button" id="smode-publicite" onclick="setSelectedMode('publicite')" aria-pressed="false" class="smode w-full flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 text-left transition">
+            <span class="w-10 h-10 shrink-0 rounded-lg bg-emerald/10 text-emerald flex items-center justify-center"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg></span>
+            <span class="min-w-0"><span class="block text-sm font-bold text-slate-900">Génération Visuel Publicitaire</span><span class="block text-xs text-slate-500">Affiche produit 8K avec Muse Image</span></span>
+          </button>
+          <button type="button" id="smode-fiche" onclick="setSelectedMode('fiche')" aria-pressed="false" class="smode w-full flex items-center gap-3 p-3 rounded-xl border-2 border-slate-200 text-left transition">
+            <span class="w-10 h-10 shrink-0 rounded-lg bg-emerald/10 text-emerald flex items-center justify-center"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z"/></svg></span>
+            <span class="min-w-0"><span class="block text-sm font-bold text-slate-900">Fiche Commerciale Vendeuse</span><span class="block text-xs text-slate-500">Textes WhatsApp et réseaux avec Llama 3.1</span></span>
+          </button>
+        </div>
+        <p class="text-sm font-semibold text-slate-800 pt-1">Décor souhaité</p>
+        <div class="grid grid-cols-2 gap-2 text-sm">
+          <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 cursor-pointer has-[:checked]:border-emerald has-[:checked]:bg-emerald/10">
+            <input type="radio" name="decor" value="marbre" checked class="accent-emerald"><span>🏛️ Marbre et or</span>
+          </label>
+          <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 cursor-pointer has-[:checked]:border-emerald has-[:checked]:bg-emerald/10">
+            <input type="radio" name="decor" value="bois" class="accent-emerald"><span>🌿 Bois et nature</span>
+          </label>
+          <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 cursor-pointer has-[:checked]:border-emerald has-[:checked]:bg-emerald/10">
+            <input type="radio" name="decor" value="minimal" class="accent-emerald"><span>🏢 Studio épuré</span>
+          </label>
+          <label class="flex items-center gap-2 p-2.5 rounded-lg border border-slate-200 cursor-pointer has-[:checked]:border-emerald has-[:checked]:bg-emerald/10">
+            <input type="radio" name="decor" value="afro" class="accent-emerald"><span>🎨 Afro-moderne</span>
+          </label>
+        </div>
+
+        <div id="edit-block">
+          <label for="edit-input" class="block text-sm font-semibold text-slate-800">Décrivez la transformation souhaitée sur votre photo</label>
+          <p class="text-xs text-slate-500 mb-2">Description ou souhaits de retouche. Ex : « Savon au beurre de karité, posé sur un socle en marbre sous éclairage studio doré »</p>
+          <div class="relative" data-field>
+            <textarea id="edit-input" rows="4" maxlength="400" placeholder="Ex : Rendre l’objet rouge vif, changer sa forme en carré, ajouter des motifs dorés..." class="w-full border border-slate-300 rounded-2xl px-3 pt-2.5 pb-14 text-sm focus:outline-none focus:border-emerald resize-none"></textarea>
+            <span data-listening class="hidden absolute bottom-5 left-3 text-xs font-medium text-slate-500 animate-pulse">● Écoute en cours...</span>
+            <div class="absolute bottom-2 right-2 flex items-center gap-1">
+              <button type="button" data-mic id="mic-edit-input" onclick="toggleMic('edit-input', this)" aria-label="Dicter avec le micro" aria-pressed="false" class="relative w-10 h-10 rounded-full text-slate-900 hover:bg-slate-100 flex items-center justify-center transition">
+                <span data-ring class="hidden absolute inset-1 rounded-full bg-slate-400/40 animate-ping"></span>
+                <span class="relative"><svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z"/></svg></span>
+              </button>
+              <button type="button" onclick="launchGeneration()" aria-label="Envoyer et lancer la transformation" class="w-10 h-10 rounded-full bg-[#3366F0] hover:bg-[#2A58D8] text-white flex items-center justify-center shadow-sm transition"><svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 10.5L12 3m0 0l7.5 7.5M12 3v18"/></svg></button>
+            </div>
+          </div>
+          <p id="note-edit-input" class="hidden text-xs text-slate-500 mt-1" role="status"></p>
+          <p class="text-xs font-semibold text-slate-600 mt-3 mb-2">Suggestions rapides</p>
+          <div class="flex flex-wrap gap-2">
+            <button type="button" onclick="addSuggestion('edit-input', this)" class="px-3 py-1.5 rounded-full border border-mint bg-emerald/5 hover:bg-emerald/10 text-xs font-semibold text-emerald transition">Changer la couleur principale</button>
+            <button type="button" onclick="addSuggestion('edit-input', this)" class="px-3 py-1.5 rounded-full border border-mint bg-emerald/5 hover:bg-emerald/10 text-xs font-semibold text-emerald transition">Modifier la matière (or, verre, bois)</button>
+            <button type="button" onclick="addSuggestion('edit-input', this)" class="px-3 py-1.5 rounded-full border border-mint bg-emerald/5 hover:bg-emerald/10 text-xs font-semibold text-emerald transition">Ajuster la forme du produit</button>
+          </div>
+          <p class="text-xs text-slate-500 mt-2">Ces suggestions sont des points de départ : vous gardez toujours la décision finale.</p>
+        </div>
+
+        <p id="form-error" class="hidden text-sm text-red-600 font-medium" role="alert"></p>
+
+        <button type="button" id="btn-generate" onclick="launchGeneration()" class="group w-full py-3.5 bg-emerald hover:bg-emerald-dark text-white font-bold rounded-xl transition flex items-center justify-center gap-2 text-sm shadow-sm"><span>Transformer mon produit ✨</span><svg class="w-5 h-5 arrow-nudge transition-transform group-hover:translate-x-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg></button>
+      </div>
+    </section>
+
+    <!-- Colonne droite : résultat -->
+    <section class="lg:col-span-7 space-y-5">
+
+      <div class="card p-5 sm:p-6">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-4">
+          <h2 class="font-bold text-base flex items-center gap-2"><svg class="w-4 h-4 inline-block align-[-2px] text-emerald" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.429 9.75L2.25 12l4.179 2.25m0-4.5l5.571 3 5.571-3m-11.142 0L2.25 7.5 12 2.25l9.75 5.25-4.179 2.25m0 0L21.75 12l-4.179 2.25m0 0l4.179 2.25L12 21.75 2.25 16.5l4.179-2.25m11.142 0l-5.571 3-5.571-3"/></svg> Votre visuel</h2>
+          <span id="generation-badge" class="text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 border border-slate-200">En attente</span>
+        </div>
+
+        <div class="rounded-xl bg-slate-100 border border-slate-200 flex items-center justify-center min-h-[280px] overflow-hidden">
+          <div id="result-placeholder" class="text-center p-6 text-slate-500">
+            <svg class="w-10 h-10 block mx-auto mb-2 opacity-40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.25 15.75l5.159-5.159a2.25 2.25 0 013.182 0l5.159 5.159m-1.5-1.5l1.409-1.409a2.25 2.25 0 013.182 0l2.909 2.909m-18 3.75h16.5a1.5 1.5 0 001.5-1.5V6a1.5 1.5 0 00-1.5-1.5H3.75A1.5 1.5 0 002.25 6v12a1.5 1.5 0 001.5 1.5zm10.5-11.25h.008v.008h-.008V8.25zm.375 0a.375.375 0 11-.75 0 .375.375 0 01.75 0z"/></svg>
+            <p class="text-sm">Votre visuel avec son décor apparaîtra ici</p>
+          </div>
+          <img id="workspace-photo" alt="Photo validée" class="hidden max-h-96 max-w-full w-auto h-auto object-contain rounded-lg shadow-sm">
+          <canvas id="studio-canvas" class="hidden max-h-96 max-w-full w-auto h-auto"></canvas>
+        </div>
+
+        <div class="mt-4 flex flex-wrap items-center justify-between gap-3">
+          <button type="button" onclick="downloadAsset()" class="px-4 py-2.5 border-2 border-emerald text-emerald hover:bg-emerald/10 rounded-lg text-sm font-semibold transition flex items-center gap-2">
+            <svg class="w-4 h-4 inline-block align-[-2px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3"/></svg> Télécharger
+          </button>
+          <button type="button" onclick="exportToWhatsApp()" class="px-4 py-2.5 bg-emerald hover:bg-emerald-dark text-white rounded-lg text-sm font-bold transition flex items-center gap-2">
+            <svg class="w-4 h-4 inline-block align-[-2px]" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg> Nous écrire sur WhatsApp
+          </button>
+        </div>
+      </div>
+
+      <div class="card p-5 sm:p-6">
+        <div class="flex items-center justify-between pb-3 border-b border-slate-200 mb-3">
+          <h2 class="font-bold text-base flex items-center gap-2"><svg class="w-4 h-4 inline-block align-[-2px] text-gold-deep" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16.862 4.487l1.687-1.688a1.875 1.875 0 112.652 2.652L10.582 16.07a4.5 4.5 0 01-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 011.13-1.897l8.932-8.931zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0115.75 21H5.25A2.25 2.25 0 013 18.75V8.25A2.25 2.25 0 015.25 6H10"/></svg> Texte de vente</h2>
+          <button type="button" id="btn-copy" onclick="copyText()" class="hidden text-sm font-semibold text-emerald hover:underline"><svg class="w-4 h-4 inline-block align-[-2px]" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15.75 17.25v3.375c0 .621-.504 1.125-1.125 1.125h-9.75a1.125 1.125 0 01-1.125-1.125V7.875c0-.621.504-1.125 1.125-1.125H6.75a9.06 9.06 0 011.5.124m7.5 10.376h3.375c.621 0 1.125-.504 1.125-1.125V11.25c0-4.46-3.243-8.161-7.5-8.876a9.06 9.06 0 00-1.5-.124H9.375c-.621 0-1.125.504-1.125 1.125v3.5m7.5 10.375H9.375a1.125 1.125 0 01-1.125-1.125v-9.25m12 6.625v-1.875a3.375 3.375 0 00-3.375-3.375h-1.5a1.125 1.125 0 01-1.125-1.125v-1.5a3.375 3.375 0 00-3.375-3.375H9.75"/></svg> <span id="copy-label">Copier</span></button>
+        </div>
+        <div id="ai-copy" class="text-sm text-slate-700 space-y-2 leading-relaxed bg-slate-50 p-4 rounded-xl border border-slate-200">
+          <p class="text-slate-500">Indiquez le nom du produit, puis créez votre visuel : le texte à publier s’affichera ici.</p>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <!-- Recharge -->
+  <div id="recharge-modal" class="fixed inset-0 z-50 hidden items-center justify-center p-4 bg-night/80 backdrop-blur-sm" onclick="if(event.target===this)closeRechargeModal()" role="dialog" aria-modal="true" aria-labelledby="modal-title">
+    <div class="bg-white border-2 border-mint rounded-2xl max-w-md w-full p-6 relative shadow-2xl max-h-[92vh] overflow-y-auto">
+      <button type="button" onclick="closeRechargeModal()" aria-label="Fermer" class="absolute top-3 right-3 w-9 h-9 rounded-full text-slate-500 hover:bg-slate-100 text-lg">✕</button>
+      <div class="text-center mb-5">
+        <div class="w-12 h-12 rounded-full bg-gold/15 text-gold-deep flex items-center justify-center mx-auto mb-2 text-xl"><svg class="w-4 h-4 inline-block align-[-2px]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v1H8a1 1 0 000 2h1v2H8a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V9h1a1 1 0 100-2h-1V6z"/></svg></div>
+        <h3 id="modal-title" class="text-lg font-extrabold">Recharger vos crédits</h3>
+        <p class="text-sm text-slate-500 mt-1">Chaque visuel coûte 1 crédit.</p>
+      </div>
+
+      <div class="space-y-3 text-sm mb-5">
+        <a href="https://paystack.shop/pay/daa-studio-decouverte" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between gap-3 p-3.5 rounded-xl border border-slate-200 hover:border-emerald transition">
+          <div><p class="font-bold">Pack Découverte</p><p class="text-xs text-slate-500">20 crédits · 150 FCFA le crédit</p></div>
+          <span class="font-extrabold whitespace-nowrap">3 000 FCFA</span>
+        </a>
+        <a href="https://paystack.shop/pay/daa-studio-pro" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between gap-3 p-3.5 rounded-xl border-2 border-emerald bg-emerald/5 transition hover:bg-emerald/10">
+          <div>
+            <span class="text-xs px-2 py-0.5 rounded bg-gold-deep text-white font-bold">Recommandé</span>
+            <p class="font-bold mt-1">Pack Pro</p>
+            <p class="text-xs text-slate-500">100 crédits · 100 FCFA le crédit</p>
+          </div>
+          <span class="font-extrabold text-emerald whitespace-nowrap">10 000 FCFA</span>
+        </a>
+        <a href="https://paystack.shop/pay/daa-studio-business" target="_blank" rel="noopener noreferrer" class="flex items-center justify-between gap-3 p-3.5 rounded-xl border border-slate-200 hover:border-emerald transition">
+          <div><p class="font-bold">Pack Business</p><p class="text-xs text-slate-500">500 crédits · 90 FCFA le crédit</p></div>
+          <span class="font-extrabold whitespace-nowrap">45 000 FCFA</span>
+        </a>
+      </div>
+
+      <p class="pt-3 border-t border-slate-200 text-center text-xs text-slate-500">Paiement sécurisé Paystack : Wave, Orange Money, MTN MoMo, Moov, cartes bancaires</p>
+    </div>
+  </div>
+
+  <script>
+    const WHATSAPP_NUMBER = '2250544188155'; // numéro DAA (support)
+    const FREE_CREDITS = 5;
+    const KEY = 'daa_studio_credits';
+
+    // Service de création (côté serveur, clés jamais exposées dans la page).
+    // POST /api/generate  corps : { productName, prompt, imageBase64 (JPEG brut, sans préfixe), mode }
+    //   mode : 'packaging' | 'publicite' | 'fiche'
+    // Réponse attendue : { image?: "<data URL ou URL https (CORS)>", copy?: "<texte de vente>" }
+    // Une erreur ou un service indisponible n'entraîne jamais de débit de crédit.
+    const API_URL = '/api/generate';
+    const DECOR_LABELS = { marbre: 'marbre et or luxe', bois: 'bois noble et nature', minimal: 'studio épuré chic', afro: 'afro-moderne vibrant' };
+    const BTN_CLASS = 'group w-full py-3.5 bg-emerald hover:bg-emerald-dark text-white font-bold rounded-xl transition flex items-center justify-center gap-2 text-sm shadow-sm';
+    const BTN_IDLE = '<span>Transformer mon produit ✨</span><svg class="w-5 h-5 arrow-nudge transition-transform group-hover:translate-x-1.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3"/></svg>';
+
+    // Mode gratuit : filigrane obligatoire. ⚠️ Ne jamais piloter ce réglage côté navigateur pour des offres payantes :
+    // il doit venir de votre serveur (compte + paiement vérifié).
+    const IS_PREMIUM = false;
+
+    // ⚠️ Crédits stockés sur l'appareil : contournables (vider les données = 5 crédits).
+    // Pour des crédits payants fiables : compte utilisateur + base de données + webhook Paystack côté serveur.
+    function loadCredits() {
+      try {
+        const v = localStorage.getItem(KEY);
+        if (v !== null && !isNaN(+v)) return Math.max(0, parseInt(v, 10));
+        localStorage.setItem(KEY, FREE_CREDITS);
+      } catch (e) {}
+      return FREE_CREDITS;
+    }
+    function saveCredits() { try { localStorage.setItem(KEY, userCredits); } catch (e) {} }
+
+    let userCredits = loadCredits();
+    let currentMode = 'artisan';       // format du visuel (artisan / pme / enterprise)
+    let selectedMode = 'packaging';    // transformation (packaging / publicite / fiche)
+    let currentTab = 'photo';
+    let uploadedImage = null;   // photo validée
+    let pendingImage = null;    // photo choisie, en attente de validation
+    let lastCopy = '';
+    let busy = false;
+
+    const FORMATS = { artisan: [800, 800], pme: [1200, 675], enterprise: [1080, 1350] };
+    const DECORS = {
+      marbre:  ['#FFFFFF', '#E7DCC3'],
+      bois:    ['#8B5E3C', '#3F2A1A'],
+      minimal: ['#F1F5F9', '#CBD5E1'],
+      afro:    ['#059669', '#F59E0B']
+    };
+
+    function setGenerateBtn(state) {
+      const btn = document.getElementById('btn-generate');
+      if (state === 'loading') {
+        btn.className = 'w-full py-3.5 bg-emerald/90 text-white font-bold rounded-xl flex items-center justify-center gap-2 text-sm shadow-sm cursor-wait';
+        btn.innerHTML = '<span class="w-4 h-4 shrink-0 rounded-full border-2 border-white border-t-transparent animate-spin"></span><span>SAM 3.1 &amp; Muse préparent votre rendu HD...</span>';
+      } else if (state === 'empty') {
+        btn.className = 'w-full py-3.5 bg-gradient-to-r from-gold to-gold-deep text-slate-950 font-extrabold rounded-xl transition flex items-center justify-center gap-2 text-sm shadow-sm';
+        btn.innerHTML = '<span>⚡ Crédits épuisés : recharger</span>';
+      } else {
+        btn.className = BTN_CLASS;
+        btn.innerHTML = BTN_IDLE;
+      }
+    }
+
+    function updateCreditsUI() {
+      document.getElementById('credits-badge').textContent = userCredits + (userCredits > 1 ? ' crédits' : ' crédit');
+      if (userCredits <= 0) setGenerateBtn('empty');
+    }
+
+    // ---------- Onglets ----------
+    function setTab(tab) {
+      currentTab = tab;
+      showError('');
+      ['photo', 'text', 'video'].forEach(t => {
+        const on = t === tab;
+        const b = document.getElementById('tab-' + t);
+        b.setAttribute('aria-selected', on);
+        b.tabIndex = on ? 0 : -1;
+        b.className = 'relative px-1 py-2.5 rounded-xl border-2 text-center transition ' + (on ? 'border-emerald bg-emerald/10' : 'border-slate-200 hover:border-mint');
+        document.getElementById('panel-' + t).classList.toggle('hidden', !on);
+      });
+      document.getElementById('step3').classList.toggle('hidden', tab === 'video');
+      // le mode « Packaging » exige une photo : en onglet texte on propose le visuel publicitaire
+      if (tab === 'text' && selectedMode === 'packaging') setSelectedMode('publicite');
+      document.getElementById('edit-block').classList.toggle('hidden', tab !== 'photo');
+    }
+    document.getElementById('tablist').addEventListener('keydown', e => {
+      const order = ['photo', 'text', 'video'];
+      let i = order.indexOf(currentTab);
+      if (e.key === 'ArrowRight') i = (i + 1) % 3;
+      else if (e.key === 'ArrowLeft') i = (i + 2) % 3;
+      else return;
+      e.preventDefault();
+      setTab(order[i]);
+      document.getElementById('tab-' + order[i]).focus();
+    });
+
+    function useSuggestion(btn) {
+      const t = document.getElementById('prompt-input');
+      t.value = btn.textContent.trim();
+      t.focus();
+    }
+
+    function notifyVideo() {
+      const msg = encodeURIComponent('Bonjour Digital Artisans Academy ! Prévenez-moi dès le lancement de la Vidéo Promo IA (V2) du Studio DAA.');
+      window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank', 'noopener');
+    }
+
+    // ---------- Réglages ----------
+    function setMode(mode) {
+      currentMode = mode;
+      ['artisan', 'pme', 'enterprise'].forEach(m => {
+        const on = m === mode;
+        const b = document.getElementById('btn-' + m);
+        b.className = 'mode-btn p-3 rounded-xl border-2 text-center transition ' + (on ? 'border-emerald bg-emerald/10' : 'border-slate-200 hover:border-mint');
+        b.setAttribute('aria-pressed', on);
+      });
+    }
+
+    function setSelectedMode(m) {
+      selectedMode = m;
+      ['packaging', 'publicite', 'fiche'].forEach(k => {
+        const on = k === m;
+        const b = document.getElementById('smode-' + k);
+        b.setAttribute('aria-pressed', on);
+        b.className = 'smode w-full flex items-center gap-3 p-3 rounded-xl border-2 text-left transition ' + (on ? 'border-emerald bg-emerald/10' : 'border-slate-200 hover:border-mint');
+      });
+    }
+
+    function showError(msg) {
+      const el = document.getElementById('form-error');
+      el.textContent = msg || '';
+      el.classList.toggle('hidden', !msg);
+    }
+
+    // ---------- Photo : choix, aperçu, validation ----------
+    function setPhotoState(s) {
+      ['choose', 'review', 'validated'].forEach(k => document.getElementById('photo-' + k).classList.toggle('hidden', k !== s));
+    }
+
+    function handlePick(e) {
+      const file = e.target.files[0];
+      e.target.value = '';              // permet de rechoisir la même photo
+      if (file) loadPicked(file);
+    }
+
+    function loadPicked(file) {
+      if (!file.type.startsWith('image/')) { showError('Ce fichier n’est pas une image.'); return; }
+      const reader = new FileReader();
+      reader.onload = ev => {
+        const img = new Image();
+        img.onload = () => {
+          pendingImage = img;
+          document.getElementById('review-img').src = ev.target.result;
+          setPhotoState('review');
+          showError('');
+        };
+        img.onerror = () => showError('Image illisible : essayez une autre photo.');
+        img.src = ev.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function validatePhoto() {
+      if (!pendingImage) return;
+      uploadedImage = pendingImage;
+      const src = document.getElementById('review-img').src;
+      document.getElementById('validated-thumb').src = src;
+      document.getElementById('workspace-photo').src = src;
+      setPhotoState('validated');
+      refreshWorkspace();
+    }
+
+    function discardPhoto() {
+      pendingImage = null; uploadedImage = null;
+      ['review-img', 'validated-thumb', 'workspace-photo'].forEach(id => document.getElementById(id).removeAttribute('src'));
+      setPhotoState('choose');
+      refreshWorkspace();
+    }
+
+    // Affiche la photo validée dans l'espace de travail tant qu'aucun visuel n'a été créé
+    function refreshWorkspace() {
+      const canvas = document.getElementById('studio-canvas');
+      const wp = document.getElementById('workspace-photo');
+      const ph = document.getElementById('result-placeholder');
+      if (uploadedImage) {
+        wp.classList.remove('hidden'); canvas.classList.add('hidden'); ph.classList.add('hidden');
+        setBadge('photo');
+      } else {
+        wp.classList.add('hidden');
+        const shown = !canvas.classList.contains('hidden');
+        ph.classList.toggle('hidden', shown);
+        if (!shown) setBadge('idle');
+      }
+    }
+
+    function restoreBadge() {
+      const shown = !document.getElementById('studio-canvas').classList.contains('hidden');
+      setBadge(shown ? 'ok' : (uploadedImage ? 'photo' : 'idle'));
+    }
+
+    // ---------- Champs de description : suggestions, micro, envoi ----------
+    function addSuggestion(fieldId, btn) {
+      const f = document.getElementById(fieldId);
+      const base = f.value.trim();
+      f.value = (base ? base + '\n' : '') + btn.textContent.trim() + ' : ';
+      f.focus();
+      f.setSelectionRange(f.value.length, f.value.length);
+    }
+
+    // Dictée vocale (Web Speech API, français). Si le navigateur ne la gère pas : simple message d'information.
+    const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let rec = null;
+
+    function micNote(fieldId, msg) {
+      const n = document.getElementById('note-' + fieldId);
+      n.textContent = msg;
+      n.classList.remove('hidden');
+      clearTimeout(n._t);
+      n._t = setTimeout(() => n.classList.add('hidden'), 6000);
+    }
+
+    function setMic(btn, on) {
+      btn.setAttribute('aria-pressed', on);
+      btn.classList.toggle('bg-slate-100', on);
+      btn.querySelector('[data-ring]').classList.toggle('hidden', !on);
+      btn.closest('[data-field]').querySelector('[data-listening]').classList.toggle('hidden', !on);
+    }
+
+    function toggleMic(fieldId, btn) {
+      if (rec) { rec.stop(); return; }         // un second clic arrête l'écoute
+      if (!SR) { micNote(fieldId, 'La dictée vocale n’est pas disponible sur ce navigateur : saisissez votre texte au clavier.'); return; }
+      const field = document.getElementById(fieldId);
+      const base = field.value.trim();
+      rec = new SR();
+      rec.lang = 'fr-FR';
+      rec.interimResults = true;
+      rec.continuous = false;
+      rec.onstart = () => setMic(btn, true);
+      rec.onresult = e => {
+        let t = '';
+        for (let i = 0; i < e.results.length; i++) t += e.results[i][0].transcript;
+        field.value = ((base ? base + ' ' : '') + t.trim()).slice(0, 400);
+      };
+      rec.onerror = e => {
+        if (e.error === 'not-allowed' || e.error === 'service-not-allowed') micNote(fieldId, 'Autorisez le micro dans votre navigateur pour dicter, ou saisissez votre texte au clavier.');
+        else if (e.error === 'no-speech') micNote(fieldId, 'Aucune voix détectée : réessayez.');
+        else if (e.error === 'network') micNote(fieldId, 'La dictée vocale nécessite une connexion Internet.');
+      };
+      rec.onend = () => { setMic(btn, false); rec = null; };
+      try { rec.start(); } catch (err) { setMic(btn, false); rec = null; }
+    }
+
+    // Ctrl/Cmd + Entrée = envoyer
+    ['edit-input', 'prompt-input'].forEach(id => document.getElementById(id).addEventListener('keydown', e => {
+      if (e.key === 'Enter' && (e.ctrlKey || e.metaKey)) { e.preventDefault(); launchGeneration(); }
+    }));
+
+    // Glisser-déposer (ordinateur)
+    (function () {
+      const zone = document.getElementById('photo-choose');
+      ['dragenter', 'dragover'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.add('border-emerald'); }));
+      ['dragleave', 'drop'].forEach(ev => zone.addEventListener(ev, e => { e.preventDefault(); zone.classList.remove('border-emerald'); }));
+      zone.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) loadPicked(f); });
+    })();
+
+    function loadImage(src) {
+      return new Promise((ok, ko) => {
+        const i = new Image();
+        i.crossOrigin = 'anonymous';
+        i.onload = () => ok(i);
+        i.onerror = () => ko(new Error('Image illisible'));
+        i.src = src;
+      });
+    }
+
+    // Photo validée -> JPEG réduit (1280 px max), en base64 brut calculé à l'exécution
+    function photoToBase64(img) {
+      const s = Math.min(1, 1280 / Math.max(img.width, img.height));
+      const c = document.createElement('canvas');
+      c.width = Math.round(img.width * s); c.height = Math.round(img.height * s);
+      c.getContext('2d').drawImage(img, 0, 0, c.width, c.height);
+      return c.toDataURL('image/jpeg', 0.85).split(',')[1];
+    }
+
+    async function callGenerate(productName, promptText, base64Data, selectedMode) {
+      const res = await fetch('/api/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          productName: productName,
+          prompt: promptText,
+          imageBase64: base64Data,
+          mode: selectedMode
+        })
+      });
+      if (!res.ok) { const err = new Error('HTTP ' + res.status); err.status = res.status; throw err; }
+      return res.json();
+    }
+
+    // ---------- Génération ----------
+    function setBadge(state, label) {
+      const b = document.getElementById('generation-badge');
+      if (state === 'progress') {
+        b.className = 'text-xs px-2.5 py-1 rounded-full bg-gold/15 text-gold-deep border border-gold/40 font-semibold inline-flex items-center gap-1.5';
+        b.innerHTML = '<span class="w-3 h-3 rounded-full border-2 border-current border-t-transparent animate-spin"></span><span>Traitement en cours…</span>';
+      } else if (state === 'photo') {
+        b.className = 'text-xs px-2.5 py-1 rounded-full bg-emerald/10 text-emerald border border-emerald/40 font-semibold';
+        b.textContent = 'Photo validée';
+      } else if (state === 'ok') {
+        b.className = 'text-xs px-2.5 py-1 rounded-full bg-emerald/10 text-emerald border border-emerald/40 font-bold';
+        b.textContent = '✓ ' + (label || 'Visuel prêt');
+      } else {
+        b.className = 'text-xs px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 border border-slate-200';
+        b.textContent = 'En attente';
+      }
+    }
+
+    function launchGeneration() {
+      if (busy || currentTab === 'video') return;
+      if (userCredits <= 0) { openRechargeModal(); return; }
+      showError('');
+
+      const fromPhoto = currentTab === 'photo';
+      const text = document.getElementById(fromPhoto ? 'edit-input' : 'prompt-input').value.trim();
+      if (fromPhoto && !uploadedImage) { showError(pendingImage ? 'Validez d’abord votre photo avec le bouton vert ✓.' : 'Ajoutez d’abord la photo de votre produit.'); return; }
+      if (!fromPhoto && text.length < 8) { showError('Décrivez votre produit en quelques mots (8 caractères minimum).'); return; }
+      if (!fromPhoto && selectedMode === 'packaging') { showError('Le mode « Packaging & Retouche Luxe » a besoin d’une photo : passez à l’onglet Photo Produit ou choisissez un autre mode.'); return; }
+
+      const decor = DECOR_LABELS[document.querySelector('input[name="decor"]:checked').value];
+      const promptText = [text, 'Décor souhaité : ' + decor].filter(Boolean).join('. ');
+      const productName = text.split(/[,.:\n]/)[0].trim().slice(0, 60) || 'Produit';
+      runGeneration(productName, promptText, fromPhoto ? photoToBase64(uploadedImage) : '', selectedMode);
+    }
+
+    async function runGeneration(productName, promptText, base64Data, mode) {
+      busy = true;
+      const btn = document.getElementById('btn-generate');
+      btn.disabled = true;
+      setGenerateBtn('loading');
+      setBadge('progress');
+      try {
+        const data = await callGenerate(productName, promptText, base64Data, mode);
+        if (!data || (!data.image && !data.copy)) throw new Error('Réponse vide');
+        if (data.image) {
+          const img = await loadImage(data.image);
+          try { await document.fonts.load('800 40px Inter'); } catch (e) {}
+          renderCanvas(img, true);
+        }
+        // Le crédit n'est débité qu'une fois le résultat réellement reçu
+        userCredits--; saveCredits(); updateCreditsUI();
+        setBadge('ok', data.image ? 'Visuel prêt' : 'Fiche prête');
+        renderCopy(productName === 'Produit' ? '[Nom du produit]' : productName, data.copy);
+      } catch (err) {
+        console.error(err);
+        restoreBadge();
+        const msg = err.status === 413 ? 'Photo trop lourde : choisissez-en une plus légère.'
+                  : err.status === 429 ? 'Beaucoup de demandes en ce moment : réessayez dans une minute.'
+                  : 'Le service de création est momentanément indisponible.';
+        showError(msg + ' Aucun crédit n’a été débité.');
+      } finally {
+        busy = false;
+        btn.disabled = false;
+        setGenerateBtn(userCredits <= 0 ? 'empty' : 'idle');
+      }
+    }
+
+    // ---------- Rendu canvas + filigrane ----------
+    function renderCanvas(img, fullBleed) {
+      const canvas = document.getElementById('studio-canvas');
+      const ctx = canvas.getContext('2d');
+      const [W, H] = FORMATS[currentMode];
+      canvas.width = W; canvas.height = H;
+      document.getElementById('result-placeholder').classList.add('hidden');
+      document.getElementById('workspace-photo').classList.add('hidden');
+      canvas.classList.remove('hidden');
+
+      let x, y, w, h;
+      if (fullBleed) {
+        // Visuel généré : plein format studio, sans marges
+        const s = Math.max(W / img.width, H / img.height);
+        ctx.drawImage(img, (W - img.width * s) / 2, (H - img.height * s) / 2, img.width * s, img.height * s);
+        x = 0; y = 0; w = W; h = H;
+      } else {
+        // Photo produit : décor studio + produit en grand, centré
+        const [c1, c2] = DECORS[document.querySelector('input[name="decor"]:checked').value];
+        const g = ctx.createLinearGradient(0, 0, W, H);
+        g.addColorStop(0, c1); g.addColorStop(1, c2);
+        ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+
+        const r = Math.min(W * 0.86 / img.width, H * 0.86 / img.height);
+        w = img.width * r; h = img.height * r;
+        x = (W - w) / 2; y = (H - h) / 2;
+        ctx.save();
+        ctx.shadowColor = 'rgba(15,23,42,0.45)'; ctx.shadowBlur = 40; ctx.shadowOffsetY = 18;
+        ctx.drawImage(img, x, y, w, h);
+        ctx.restore();
+      }
+      if (!IS_PREMIUM) drawWatermark(ctx, x, y, w, h);
+    }
+
+    // Filigrane en diagonale, au centre du sujet : le rogner reviendrait à couper le produit
+    function drawWatermark(ctx, x, y, w, h) {
+      const label = 'DAA AI — MODE DÉCOUVERTE';
+      const deg = Math.max(20, Math.min(50, Math.atan2(h, w) * 180 / Math.PI));
+      const angle = -deg * Math.PI / 180;
+      ctx.save();
+      ctx.font = '800 100px Inter, sans-serif';
+      const fs = 100 * (Math.hypot(w, h) * 0.62) / ctx.measureText(label).width;
+      ctx.font = '800 ' + fs + 'px Inter, sans-serif';
+      ctx.translate(x + w / 2, y + h / 2);
+      ctx.rotate(angle);
+      ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+      ctx.lineJoin = 'round';
+      ctx.shadowColor = 'rgba(0,0,0,0.55)';
+      ctx.shadowBlur = fs * 0.18; ctx.shadowOffsetY = fs * 0.05;
+      ctx.lineWidth = fs * 0.06;
+      ctx.strokeStyle = 'rgba(15,23,42,0.35)';
+      ctx.strokeText(label, 0, 0);
+      ctx.fillStyle = 'rgba(255,255,255,0.55)';
+      ctx.fillText(label, 0, 0);
+      ctx.restore();
+    }
+
+    // ---------- Texte de vente ----------
+    function renderCopy(name, serverCopy) {
+      const fromServer = !!(serverCopy && String(serverCopy).trim());
+      lastCopy = fromServer ? String(serverCopy).trim()
+        : name + '\n\nUne création soignée, pensée pour durer et pour vous distinguer.\n\nPrix : [à compléter] FCFA\nCommande et livraison : écrivez-nous sur WhatsApp au [votre numéro]';
+      const box = document.getElementById('ai-copy');
+      box.replaceChildren();
+      lastCopy.split(/\n\s*\n/).forEach((part, i) => {
+        const p = document.createElement('p');
+        p.textContent = part; // textContent : jamais d'injection HTML
+        p.className = 'whitespace-pre-line' + (!fromServer && i === 0 ? ' font-bold text-emerald text-base' : '');
+        box.appendChild(p);
+      });
+      document.getElementById('btn-copy').classList.remove('hidden');
+    }
+
+    function copyText() {
+      if (!navigator.clipboard) return;
+      navigator.clipboard.writeText(lastCopy).then(() => {
+        const l = document.getElementById('copy-label');
+        l.textContent = '✓ Copié';
+        setTimeout(() => l.textContent = 'Copier', 1800);
+      });
+    }
+
+    function exportToWhatsApp() {
+      const msg = encodeURIComponent('Bonjour Digital Artisans Academy ! J’ai créé un visuel avec le Studio DAA. Je souhaite en savoir plus.');
+      window.open('https://wa.me/' + WHATSAPP_NUMBER + '?text=' + msg, '_blank', 'noopener');
+    }
+
+    function downloadAsset() {
+      const canvas = document.getElementById('studio-canvas');
+      if (canvas.classList.contains('hidden')) { showError('Créez d’abord un visuel pour pouvoir le télécharger.'); return; }
+      try {
+        const a = document.createElement('a');
+        a.download = 'daa-visuel.png';
+        a.href = canvas.toDataURL('image/png');
+        a.click();
+      } catch (e) { showError('Téléchargement impossible pour cette image.'); }
+    }
+
+    // ---------- Modale de recharge ----------
+    function openRechargeModal() { const m = document.getElementById('recharge-modal'); m.classList.remove('hidden'); m.classList.add('flex'); }
+    function closeRechargeModal() { const m = document.getElementById('recharge-modal'); m.classList.add('hidden'); m.classList.remove('flex'); }
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') closeRechargeModal(); });
+
+    updateCreditsUI();
+    setMode('artisan');
+    setTab('photo');
+    setSelectedMode('packaging');
+  </script>
+</body>
+</html>
