@@ -5,7 +5,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Digital Artisans Academy — Digitalisation & IA pour commerces à Abidjan</title>
-  <meta name="description" content="DAA, l'agence & académie N°1 à Abidjan : catalogues WhatsApp Pro, vidéos TikTok, sites, agents IA. Digitalisez votre commerce en 48h-72h.">
+  <meta name="description" content="DAA, agence & académie digitale à Abidjan : catalogues WhatsApp Pro, vidéos TikTok, sites et agents IA pour artisans, commerces et PME.">
   <link rel="icon" type="image/jpeg" href="logo-DAA.jpeg">
 
   <!-- Police Inter -->
@@ -140,6 +140,9 @@
       .share-vip-unlocked:not([hidden]) { animation: none; }
     }
   </style>
+  <link rel="stylesheet" href="assets/site.css">
+  <script src="assets/site-config.js" defer></script>
+  <script src="assets/site.js" defer></script>
 </head>
 
 <body class="bg-white font-sans text-night antialiased">
@@ -156,7 +159,7 @@
     </div>
     <div class="relative z-10 mx-auto flex w-full max-w-7xl flex-wrap items-center justify-center gap-3 text-sm">
       <span class="inline-flex items-center gap-1.5 rounded-full border border-amber-500/40 bg-amber-500/20 px-2.5 py-0.5 text-xs font-semibold text-amber-300">
-        <span class="h-2 w-2 animate-pulse rounded-full bg-emerald-400" aria-hidden="true"></span> 🟢 En direct : 96 / 100 places réservées (Plus que 14 disponibles)
+        100 bourses VIP offertes
       </span>
       <p class="text-center font-medium text-slate-100">LANCEMENT OFFICIEL DAA 2026 : 100 Bourses VIP offertes pour digitaliser votre activité !</p>
       <a href="#bourse-vip" class="inline-flex items-center gap-1 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 px-3.5 py-1 text-xs font-bold text-slate-950 shadow-sm transition-all duration-200 hover:scale-105 hover:from-amber-400 hover:to-amber-500 active:scale-95">Réclamer ma place <span aria-hidden="true">→</span></a>
@@ -178,7 +181,7 @@
   <header id="site-header" style="top:var(--launch-banner-height)" class="fixed inset-x-0 z-50 border-b border-slate-900/5 bg-white/80 backdrop-blur-md transition-shadow duration-300">
     <div class="mx-auto flex h-16 max-w-7xl items-center justify-between px-5 sm:h-20 sm:px-8">
       <a href="#accueil" data-testid="nav-logo-link" class="flex items-center gap-3">
-        <img src="images/logo.png" alt="Logo DAA" class="h-10 w-auto">
+        <img src="images/logo.png" alt="Logo DAA" width="1024" height="1024" fetchpriority="high" decoding="async" class="h-10 w-auto">
         <span class="hidden text-sm font-black uppercase leading-tight tracking-tight text-night md:block">
           Digital Artisans<br class="leading-none"> Academy
         </span>
@@ -192,8 +195,9 @@
       <nav class="hidden items-center gap-6 text-sm font-semibold text-slate-600 md:flex lg:gap-8" aria-label="Navigation principale">
         <a href="#services" data-testid="nav-link-services" class="transition-colors duration-300 hover:text-primary">Services</a>
         <a href="#packs" data-testid="nav-link-packs" class="transition-colors duration-300 hover:text-primary">Packs</a>
+        <a href="#bourse-vip" class="transition-colors duration-300 hover:text-primary">Académie</a>
         <a href="#realisations" data-testid="nav-link-realisations" class="transition-colors duration-300 hover:text-primary">Réalisations</a>
-        <a href="#temoignages" data-testid="nav-link-testimonials" class="transition-colors duration-300 hover:text-primary">Témoignages</a>
+        <a href="#temoignages" data-testid="nav-link-testimonials" data-testimonials-link hidden class="hidden transition-colors duration-300 hover:text-primary">Témoignages</a>
         <a href="#faq" data-testid="nav-link-faq" class="transition-colors duration-300 hover:text-primary">FAQ</a>
         <a href="studio.html" class="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full bg-gradient-to-r from-amber-500 to-amber-600 hover:from-amber-400 hover:to-amber-500 text-slate-950 font-bold text-xs transition shadow-sm">
           <span>✨</span>
@@ -218,8 +222,9 @@
       <nav class="flex flex-col gap-1 px-5 py-4 text-sm font-semibold text-slate-700" aria-label="Navigation mobile">
         <a href="#services" data-testid="mobile-nav-services" class="rounded-lg px-3 py-2.5 hover:bg-mist">Services</a>
         <a href="#packs" data-testid="mobile-nav-packs" class="rounded-lg px-3 py-2.5 hover:bg-mist">Packs</a>
+        <a href="#bourse-vip" class="rounded-lg px-3 py-2.5 hover:bg-mist">Académie</a>
         <a href="#realisations" data-testid="mobile-nav-realisations" class="rounded-lg px-3 py-2.5 hover:bg-mist">Réalisations</a>
-        <a href="#temoignages" data-testid="mobile-nav-testimonials" class="rounded-lg px-3 py-2.5 hover:bg-mist">Témoignages</a>
+        <a href="#temoignages" data-testid="mobile-nav-testimonials" data-testimonials-link hidden class="hidden rounded-lg px-3 py-2.5 hover:bg-mist">Témoignages</a>
         <a href="#avantages" data-testid="mobile-nav-avantages" class="rounded-lg px-3 py-2.5 hover:bg-mist">Pourquoi DAA</a>
         <a href="#faq" data-testid="mobile-nav-faq" class="rounded-lg px-3 py-2.5 hover:bg-mist">FAQ</a>
         <a href="#devis" data-testid="mobile-nav-devis" class="rounded-lg px-3 py-2.5 hover:bg-mist">Devis express</a>
@@ -249,17 +254,8 @@
           </h1>
 
           <p class="hero-fade mt-6 max-w-xl text-base leading-relaxed text-slate-600 md:text-lg" style="--d:.7s">
-            L'agence &amp; académie N°1 pour digitaliser les artisans, commerçants, maquis, boutiques et PME locales.
+            Agence &amp; académie digitale à Abidjan, au service des artisans, commerçants, maquis, boutiques et PME locales.
           </p>
-
-          <div class="hero-fade mt-6 flex flex-wrap items-center gap-x-4 gap-y-2" style="--d:.85s" data-testid="hero-social-proof">
-            <span class="flex items-center gap-1 text-sm text-gold" aria-label="Note 4.9 sur 5">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </span>
-            <p class="text-sm font-semibold text-slate-700">
-              <span class="font-extrabold text-night">4.9/5</span> (Plus de 85+ commerçants &amp; artisans déjà digitalisés à Abidjan)
-            </p>
-          </div>
 
           <div class="hero-fade mt-9 flex flex-col gap-4 sm:flex-row sm:items-center" style="--d:1s">
             <button type="button" data-testid="cta-diagnostic-hero" onclick="diagnosticGratuit()"
@@ -282,21 +278,10 @@
           </div>
 
           <!-- Statistiques animées -->
-          <div class="hero-fade mt-12 flex items-center gap-6 sm:gap-10" style="--d:1.15s" data-testid="hero-stats">
-            <div>
-              <p class="text-3xl font-black tracking-tight text-night sm:text-4xl" data-testid="stat-commerces"><span data-counter="85">0</span><span class="text-primary">+</span></p>
-              <p class="mt-1 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">Commerces digitalisés</p>
-            </div>
-            <div class="h-12 w-px bg-slate-200"></div>
-            <div>
-              <p class="text-3xl font-black tracking-tight text-night sm:text-4xl" data-testid="stat-livraison"><span data-counter="48">0</span><span class="text-primary">h</span></p>
-              <p class="mt-1 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">Livraison express</p>
-            </div>
-            <div class="h-12 w-px bg-slate-200"></div>
-            <div>
-              <p class="text-3xl font-black tracking-tight text-night sm:text-4xl" data-testid="stat-satisfaction"><span data-counter="4.9" data-decimals="1">0</span><span class="text-gold">/5</span></p>
-              <p class="mt-1 text-[11px] font-bold uppercase tracking-[0.18em] text-slate-500">Satisfaction clients</p>
-            </div>
+          <div class="hero-fade mt-12 grid grid-cols-1 gap-4 sm:grid-cols-3 sm:gap-6" style="--d:1.15s" data-testid="hero-stats">
+            <p class="text-sm font-extrabold text-night sm:text-base" data-testid="stat-livraison">Livraison 48 h – 72 h</p>
+            <p class="text-sm font-extrabold text-night sm:text-base" data-testid="stat-commerces">Partout à Abidjan</p>
+            <p class="text-sm font-extrabold text-night sm:text-base" data-testid="stat-satisfaction">Wave · Orange Money · MTN MoMo · Moov</p>
           </div>
         </div>
 
@@ -306,16 +291,10 @@
             <div class="absolute -inset-10 rounded-full bg-primary/15 blur-3xl"></div>
             <div class="animate-spin-slow absolute inset-0 rounded-full border-2 border-dashed border-primary/30"></div>
             <div class="absolute inset-5 overflow-hidden rounded-full bg-white shadow-2xl shadow-night/20 ring-1 ring-slate-900/10">
-              <img src="images/hero-logo.png" alt="Logo Principal DAA" class="w-full h-full object-contain p-8">
-            </div>
-            <div class="animate-floaty absolute -left-4 top-8 flex items-center gap-2 rounded-xl bg-white px-3.5 py-2 text-xs font-bold text-night shadow-lg ring-1 ring-slate-900/5 sm:-left-8" style="--d:.4s">
-              <i class="fa-solid fa-star text-gold"></i> 4.9/5 · 85+ avis
+              <img src="images/hero-logo.png" alt="Logo Principal DAA" width="1024" height="1024" fetchpriority="high" decoding="async" class="w-full h-full object-contain p-8">
             </div>
             <div class="animate-floaty absolute -right-2 top-1/2 flex items-center gap-2 rounded-xl bg-white px-3.5 py-2 text-xs font-bold text-night shadow-lg ring-1 ring-slate-900/5 sm:-right-6" style="--d:1.2s">
-              <i class="fa-solid fa-bolt text-primary"></i> Livraison 48h-72h
-            </div>
-            <div class="animate-floaty absolute bottom-6 left-2 flex items-center gap-2 rounded-xl bg-night px-3.5 py-2 text-xs font-bold text-white shadow-lg" style="--d:2s">
-              <i class="fa-solid fa-users text-primary"></i> 85+ commerces digitalisés
+              <i class="fa-solid fa-location-dot text-primary"></i> Abidjan
             </div>
           </div>
         </div>
@@ -402,7 +381,7 @@
           </div>
           <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.05s">
-              <img src="images/service-catalogue.jpg" alt="Catalogue WhatsApp Pro" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="images/service-catalogue.jpg" alt="Catalogue WhatsApp Pro" width="896" height="1195" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Catalogues WhatsApp Pro</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">Vos produits présentés dans un catalogue WhatsApp Business clair et professionnel, qui vend à votre place.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">15 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -413,7 +392,7 @@
             </article>
 
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.1s">
-              <img src="images/service-video.jpg" alt="Vidéos Réels & TikTok" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="images/service-video.jpg" alt="Vidéos Réels & TikTok" width="1024" height="1024" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Vidéo TikTok &amp; Reels (Tournage &amp; Montage)</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">Tournage et montage d'une vidéo percutante, prête pour TikTok, Instagram Reels et Facebook.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">25 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -424,7 +403,7 @@
             </article>
 
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.15s">
-              <img src="images/Fiche Google Maps.jpg" alt="Fiche Google Maps" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="images/Fiche Google Maps.jpg" alt="Fiche Google Maps" width="896" height="1195" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Fiches Google Maps</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">Votre commerce visible sur Google Maps : vos clients vous trouvent, vous appellent et viennent.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">15 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -435,7 +414,7 @@
             </article>
 
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.2s">
-              <img src="images/service-retouche-photo.jpg" alt="Retouche Photo Produit" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="images/service-retouche-photo.jpg" alt="Retouche Photo Produit" width="1280" height="698" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Retouche Photos Produits (Pack 5-10 photos)</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">5 à 10 photos produits retouchées en HD, qui donnent immédiatement envie d'acheter.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">10 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -459,7 +438,7 @@
           </div>
           <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.05s">
-              <img src="images/service-logo.jpg" alt="Logos Professionnels" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="images/service-logo.jpg" alt="Logos Professionnels" width="575" height="1280" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Logos Professionnels &amp; Déclinaisons HD</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">Un logo unique et professionnel, livré en haute définition avec toutes ses déclinaisons.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">25 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -470,7 +449,7 @@
             </article>
 
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.1s">
-              <img src="images/service-carte.jpg" alt="Service Carte de Visite" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="images/service-carte.jpg" alt="Service Carte de Visite" width="1280" height="853" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Cartes de Visite Virtuelles</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">Votre carte de visite digitale, partageable en un clic sur WhatsApp et les réseaux sociaux.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">15 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -481,7 +460,7 @@
             </article>
 
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.15s">
-              <img src="images/Bannières & Affiches Publicitaires.jpg" alt="Bannières & Affiches Publicitaires" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="images/Bannières & Affiches Publicitaires.jpg" alt="Bannières & Affiches Publicitaires" width="1280" height="698" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Bannières &amp; Affiches Publicitaires</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">Des affiches et bannières percutantes pour vos promos, vos réseaux et votre affichage.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">15 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -505,7 +484,7 @@
           </div>
           <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.05s">
-              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80" alt="Page Vitrine" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=500&q=80&fm=webp" alt="Page Vitrine" width="500" height="333" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Création de Pages Vitrines (Landing Page)</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">Une page vitrine rapide et élégante qui présente votre activité et convertit vos visiteurs.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">50 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -516,7 +495,7 @@
             </article>
 
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.1s">
-              <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500&q=80" alt="Application" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="https://images.unsplash.com/photo-1512941937669-90a1b58e7e9c?w=500&q=80&fm=webp" alt="Application" width="500" height="333" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Applications Web &amp; Mobile (PWA)</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">Votre application installable sur tous les téléphones, sans passer par les stores.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">100 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -527,7 +506,7 @@
             </article>
 
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.15s">
-              <img src="images/boutique-en-ligne.jpg" alt="Boutiques en Ligne" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="images/boutique-en-ligne.jpg" alt="Boutiques en Ligne" width="1280" height="698" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Boutiques en Ligne</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">Vendez 24h/24 avec votre boutique en ligne complète : produits, commandes et paiements.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">80 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -551,7 +530,7 @@
           </div>
           <div class="mt-8 grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-4">
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.05s">
-              <img src="images/service-agent-ia.jpg" alt="Agents IA WhatsApp" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="images/service-agent-ia.jpg" alt="Agents IA WhatsApp" width="896" height="1195" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Agents IA WhatsApp 24/7 (Installation)</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">Un agent IA installé sur votre WhatsApp, qui répond à vos clients 24h/24 et 7j/7.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">75 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -562,7 +541,7 @@
             </article>
 
             <article class="reveal group flex flex-col rounded-2xl border border-slate-200 bg-white p-6 transition-[transform,box-shadow,border-color] duration-300 hover:-translate-y-2 hover:border-primary/40 hover:shadow-xl hover:shadow-primary/5" style="--d:.1s">
-              <img src="images/réponses-automatiques.jpg" alt="Réponses Automatiques" class="w-full h-40 object-cover rounded-lg mb-4">
+              <img src="images/réponses-automatiques.jpg" alt="Réponses Automatiques" width="1280" height="698" loading="lazy" decoding="async" class="w-full h-40 object-cover rounded-lg mb-4">
               <h4 class="text-lg font-bold tracking-tight text-night">Réponses Automatiques Clients / Tunnels</h4>
               <p class="mt-2 flex-1 text-sm leading-relaxed text-slate-600">Des réponses automatiques et des tunnels de vente qui ne laissent échapper aucun client.</p>
               <p class="mt-5 text-xl font-extrabold tracking-tight text-night">35 000 <span class="text-sm font-bold text-slate-400">FCFA</span></p>
@@ -572,10 +551,10 @@
               </button>
             </article>
             <!-- 1. SERVICE MENU / CARTE DIGITALE QR & WHATSAPP -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
+            <div class="daa-card bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
               <div>
                 <div class="w-full h-44 rounded-xl bg-slate-100 mb-4 overflow-hidden flex items-center justify-center">
-                  <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80" alt="Menu QR Code WhatsApp" class="w-full h-full object-cover">
+                  <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=600&q=80&fm=webp" alt="Menu QR Code WhatsApp" width="600" height="400" loading="lazy" decoding="async" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-bold text-slate-900 mb-2">Menu QR Code & Commande WhatsApp Directe</h3>
                 <p class="text-sm text-slate-600 leading-relaxed mb-4">
@@ -583,7 +562,7 @@
                 </p>
               </div>
               <div>
-                <div class="text-xl font-extrabold text-slate-900 mb-3">40 000 FCFA</div>
+                <div class="daa-price text-xl font-extrabold text-slate-900 mb-3">40 000 FCFA</div>
                 <button onclick="commander('Menu QR Code et Commande WhatsApp', '40 000')" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition duration-200 cursor-pointer">
                   <i class="fa-brands fa-whatsapp text-lg"></i>
                   <span>Commander</span>
@@ -592,10 +571,10 @@
             </div>
 
             <!-- 2. SERVICE FACTURES & REÇUS PROFESSIONNELS WHATSAPP -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
+            <div class="daa-card bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
               <div>
                 <div class="w-full h-44 rounded-xl bg-slate-100 mb-4 overflow-hidden flex items-center justify-center">
-                  <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80" alt="Factures et Reçus WhatsApp" class="w-full h-full object-cover">
+                  <img src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?w=600&q=80&fm=webp" alt="Factures et Reçus WhatsApp" width="600" height="400" loading="lazy" decoding="async" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-bold text-slate-900 mb-2">Générateur de Factures & Reçus WhatsApp</h3>
                 <p class="text-sm text-slate-600 leading-relaxed mb-4">
@@ -603,7 +582,7 @@
                 </p>
               </div>
               <div>
-                <div class="text-xl font-extrabold text-slate-900 mb-3">30 000 FCFA</div>
+                <div class="daa-price text-xl font-extrabold text-slate-900 mb-3">30 000 FCFA</div>
                 <button onclick="commander('Generateur de Factures et Recus WhatsApp', '30 000')" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition duration-200 cursor-pointer">
                   <i class="fa-brands fa-whatsapp text-lg"></i>
                   <span>Commander</span>
@@ -612,10 +591,10 @@
             </div>
 
             <!-- 3. SERVICE COMMANDE & LIVRAISON PAR COMMUNE -->
-            <div class="bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
+            <div class="daa-card bg-white rounded-2xl border border-slate-200 p-5 shadow-xs flex flex-col justify-between">
               <div>
                 <div class="w-full h-44 rounded-xl bg-slate-100 mb-4 overflow-hidden flex items-center justify-center">
-                  <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80" alt="Livraison par commune Abidjan" class="w-full h-full object-cover">
+                  <img src="https://images.unsplash.com/photo-1586528116311-ad8dd3c8310d?w=600&q=80&fm=webp" alt="Livraison par commune Abidjan" width="600" height="400" loading="lazy" decoding="async" class="w-full h-full object-cover">
                 </div>
                 <h3 class="text-xl font-bold text-slate-900 mb-2">Formulaire Commande & Livraison par Commune</h3>
                 <p class="text-sm text-slate-600 leading-relaxed mb-4">
@@ -623,7 +602,7 @@
                 </p>
               </div>
               <div>
-                <div class="text-xl font-extrabold text-slate-900 mb-3">30 000 FCFA</div>
+                <div class="daa-price text-xl font-extrabold text-slate-900 mb-3">30 000 FCFA</div>
                 <button onclick="commander('Formulaire Commande et Livraison Commune', '30 000')" class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-semibold rounded-xl flex items-center justify-center gap-2 transition duration-200 cursor-pointer">
                   <i class="fa-brands fa-whatsapp text-lg"></i>
                   <span>Commander</span>
@@ -751,7 +730,7 @@
           </div>
 
           <p class="text-[11px] text-slate-500 mt-3">
-            🔒 Règlements sécurisés en ligne ou via WhatsApp certifiés conformes Paystack (UEMOA).
+            Paiements traités par Paystack.
           </p>
         </div>
       </div>
@@ -871,71 +850,14 @@
     </section>
 
     <!-- ================= SECTION 3 : TÉMOIGNAGES ================= -->
-    <section id="temoignages" class="bg-white py-20 sm:py-28">
+    <section id="temoignages" hidden class="hidden bg-white py-20 sm:py-28">
       <div class="mx-auto max-w-7xl px-5 sm:px-8">
         <div class="reveal mx-auto max-w-2xl text-center">
           <p class="text-xs font-bold uppercase tracking-[0.3em] text-primary">03 — Preuve sociale</p>
           <h2 class="mt-4 text-3xl font-black tracking-tight text-night sm:text-4xl">Ils nous font confiance à Abidjan</h2>
-          <p class="mt-4 flex items-center justify-center gap-2 text-base text-slate-600 md:text-lg" data-testid="testimonials-rating">
-            <span class="flex items-center gap-0.5 text-sm text-gold">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </span>
-            <span class="font-semibold"><span class="font-extrabold text-night">4.9 / 5</span> sur la base de 85+ avis vérifiés</span>
-          </p>
         </div>
 
-        <div class="mt-14 grid grid-cols-1 gap-8 md:grid-cols-3">
-          <figure class="reveal relative overflow-hidden rounded-3xl border border-slate-100 bg-mist p-8 transition-[transform,box-shadow] duration-300 hover:-translate-y-2 hover:shadow-xl" style="--d:.05s">
-            <i class="fa-solid fa-quote-left absolute -left-3 -top-4 text-[7rem] text-primary/5"></i>
-            <span class="relative flex items-center gap-1 text-sm text-gold">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </span>
-            <blockquote class="relative mt-5 text-sm leading-relaxed text-slate-700">
-              « Grâce à la fiche Google Maps et la vidéo TikTok faites par la DAA, mon restaurant de grillades reçoit maintenant des clients venant de toute la ville ! »
-            </blockquote>
-            <figcaption class="mt-6 flex items-center gap-3">
-              <img src="https://images.unsplash.com/photo-1504593811423-6dd665756598?w=150&q=80" alt="M. Kouassi" class="w-12 h-12 rounded-full object-cover">
-              <div>
-                <p class="text-sm font-bold text-night">M. Kouassi</p>
-                <p class="text-xs text-slate-500">Restauration</p>
-              </div>
-            </figcaption>
-          </figure>
-
-          <figure class="reveal relative overflow-hidden rounded-3xl border border-slate-100 bg-mist p-8 transition-[transform,box-shadow] duration-300 hover:-translate-y-2 hover:shadow-xl" style="--d:.15s">
-            <i class="fa-solid fa-quote-left absolute -left-3 -top-4 text-[7rem] text-primary/5"></i>
-            <span class="relative flex items-center gap-1 text-sm text-gold">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </span>
-            <blockquote class="relative mt-5 text-sm leading-relaxed text-slate-700">
-              « Mon catalogue WhatsApp Pro est d'une propreté incroyable. Mes clientes choisissent directement leurs modèles sans me faire perdre de temps. »
-            </blockquote>
-            <figcaption class="mt-6 flex items-center gap-3">
-              <img src="https://images.unsplash.com/photo-1531123897727-8f129e1688ce?w=150&q=80" alt="Mme Awa" class="w-12 h-12 rounded-full object-cover">
-              <div>
-                <p class="text-sm font-bold text-night">Mme Awa</p>
-                <p class="text-xs text-slate-500">Atelier de Couture</p>
-              </div>
-            </figcaption>
-          </figure>
-
-          <figure class="reveal relative overflow-hidden rounded-3xl border border-slate-100 bg-mist p-8 transition-[transform,box-shadow] duration-300 hover:-translate-y-2 hover:shadow-xl" style="--d:.25s">
-            <i class="fa-solid fa-quote-left absolute -left-3 -top-4 text-[7rem] text-primary/5"></i>
-            <span class="relative flex items-center gap-1 text-sm text-gold">
-              <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-            </span>
-            <blockquote class="relative mt-5 text-sm leading-relaxed text-slate-700">
-              « L'agent IA WhatsApp répond à mes clients même à 23h quand je dors. Mes ventes ont nettement augmenté. »
-            </blockquote>
-            <figcaption class="mt-6 flex items-center gap-3">
-              <img src="https://images.unsplash.com/photo-1531384441138-2736e62e0919?w=150&q=80" alt="M. Roland" class="w-12 h-12 rounded-full object-cover">
-              <div>
-                <p class="text-sm font-bold text-night">M. Roland</p>
-                <p class="text-xs text-slate-500">Commerce</p>
-              </div>
-            </figcaption>
-          </figure>
-        </div>
+        <div id="testimonials-grid" class="mt-14 grid grid-cols-1 gap-6 md:grid-cols-3" data-testid="testimonials-grid"></div>
 
         <div class="reveal mt-12 text-center">
           <a href="https://g.page/r/CR_NO_pa0FeeEBI/review" target="_blank" rel="noopener" data-testid="google-review-button"
@@ -967,10 +889,7 @@
               <div class="ba-after absolute inset-0 flex items-center justify-center bg-gradient-to-br from-primary to-primarydark p-6">
                 <div class="w-full max-w-[230px] rounded-2xl bg-white p-4 shadow-xl">
                   <p class="text-sm font-extrabold text-night">Chez Kouassi Grillades</p>
-                  <p class="mt-1 flex items-center gap-0.5 text-[11px] text-gold">
-                    <i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i><i class="fa-solid fa-star"></i>
-                    <span class="ml-1 font-semibold text-slate-500">4,8 · 37 avis</span>
-                  </p>
+                  <p class="mt-1 text-[11px] text-slate-500">Adresse · Horaires · Contact</p>
                   <div class="mt-3 flex gap-2">
                     <span class="flex-1 rounded-lg bg-primary py-1.5 text-center text-[11px] font-bold text-white"><i class="fa-solid fa-phone mr-1"></i>Appeler</span>
                     <span class="flex-1 rounded-lg bg-night py-1.5 text-center text-[11px] font-bold text-white"><i class="fa-solid fa-diamond-turn-right mr-1"></i>Itinéraire</span>
@@ -987,7 +906,13 @@
             <div class="mt-5">
               <h3 class="text-lg font-extrabold tracking-tight text-night">Fiche Google Maps — Restauration</h3>
               <p class="mt-1 text-sm text-slate-600">D'invisible sur Maps à premier résultat local.</p>
-              <p class="mt-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-extrabold text-primarydark"><i class="fa-solid fa-arrow-trend-up"></i>+40% de clients le week-end</p>
+              <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+                <p class="daa-eyebrow">Exemple illustratif</p>
+                <button type="button" data-gallery-open class="daa-button-secondary inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-bold transition" aria-label="Agrandir l’exemple Google Maps">
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6v6m-7 1 7-7M9 21H3v-6m7-1-7 7"/></svg>
+                  Agrandir
+                </button>
+              </div>
             </div>
           </article>
 
@@ -1023,7 +948,13 @@
             <div class="mt-5">
               <h3 class="text-lg font-extrabold tracking-tight text-night">Catalogue WhatsApp Pro — Couture</h3>
               <p class="mt-1 text-sm text-slate-600">Les clientes choisissent seules, sans échange interminable.</p>
-              <p class="mt-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-extrabold text-primarydark"><i class="fa-solid fa-arrow-trend-up"></i>Commandes 2x plus rapides</p>
+              <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+                <p class="daa-eyebrow">Exemple illustratif</p>
+                <button type="button" data-gallery-open class="daa-button-secondary inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-bold transition" aria-label="Agrandir l’exemple du catalogue WhatsApp">
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6v6m-7 1 7-7M9 21H3v-6m7-1-7 7"/></svg>
+                  Agrandir
+                </button>
+              </div>
             </div>
           </article>
 
@@ -1054,12 +985,27 @@
             <div class="mt-5">
               <h3 class="text-lg font-extrabold tracking-tight text-night">Agent IA WhatsApp — Commerce</h3>
               <p class="mt-1 text-sm text-slate-600">Chaque message reçoit une réponse, même à 23h.</p>
-              <p class="mt-3 inline-flex items-center gap-2 rounded-full bg-primary/10 px-3 py-1 text-xs font-extrabold text-primarydark"><i class="fa-solid fa-arrow-trend-up"></i>+30% de ventes dès le 1er mois</p>
+              <div class="mt-3 flex flex-wrap items-center justify-between gap-3">
+                <p class="daa-eyebrow">Exemple illustratif</p>
+                <button type="button" data-gallery-open class="daa-button-secondary inline-flex items-center gap-2 rounded-lg px-3 py-2 text-xs font-bold transition" aria-label="Agrandir l’exemple de l’agent IA">
+                  <svg class="h-4 w-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M15 3h6v6m-7 1 7-7M9 21H3v-6m7-1-7 7"/></svg>
+                  Agrandir
+                </button>
+              </div>
             </div>
           </article>
         </div>
       </div>
     </section>
+
+    <dialog id="gallery-lightbox" class="daa-lightbox" aria-label="Réalisation agrandie">
+      <div class="flex w-full flex-col gap-3">
+        <button type="button" data-gallery-close class="self-end inline-flex h-10 w-10 items-center justify-center rounded-full bg-white text-night shadow-lg" aria-label="Fermer l’agrandissement">
+          <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" aria-hidden="true"><path stroke-linecap="round" stroke-linejoin="round" d="M6 6l12 12M18 6L6 18"/></svg>
+        </button>
+        <div data-gallery-stage></div>
+      </div>
+    </dialog>
 
     <!-- ================= SECTION 5 : L'AVANTAGE DAA ================= -->
     <section id="avantages" class="bg-night py-20 text-white sm:py-28">
@@ -1224,7 +1170,7 @@
         <div>
           <div class="flex items-center gap-3">
             <span class="block h-11 w-11 overflow-hidden rounded-full ring-1 ring-white/20">
-              <img src="images/logo-pied de page.png" alt="Logo Digital Artisans Academy" class="h-full w-full scale-[1.24] object-cover">
+              <img src="images/logo-pied de page.png" alt="Logo Digital Artisans Academy" width="1024" height="1024" loading="lazy" decoding="async" class="h-full w-full scale-[1.24] object-cover">
             </span>
             <p class="text-sm font-black uppercase leading-tight tracking-tight">Digital Artisans<br>Academy</p>
           </div>
@@ -1237,7 +1183,7 @@
             <li><a href="#services" data-testid="footer-link-services" class="transition-colors duration-300 hover:text-primary">Nos services</a></li>
             <li><a href="#packs" data-testid="footer-link-packs" class="transition-colors duration-300 hover:text-primary">Nos packs</a></li>
             <li><a href="#realisations" data-testid="footer-link-realisations" class="transition-colors duration-300 hover:text-primary">Réalisations</a></li>
-            <li><a href="#temoignages" data-testid="footer-link-testimonials" class="transition-colors duration-300 hover:text-primary">Témoignages</a></li>
+            <li hidden class="hidden"><a href="#temoignages" data-testid="footer-link-testimonials" data-testimonials-link hidden class="hidden transition-colors duration-300 hover:text-primary">Témoignages</a></li>
             <li><a href="#avantages" data-testid="footer-link-avantages" class="transition-colors duration-300 hover:text-primary">Pourquoi DAA</a></li>
             <li><a href="#faq" data-testid="footer-link-faq" class="transition-colors duration-300 hover:text-primary">FAQ</a></li>
             <li><a href="#devis" data-testid="footer-link-devis" class="transition-colors duration-300 hover:text-primary">Devis express</a></li>
@@ -1390,27 +1336,6 @@
       });
     }, { threshold: 0.12 });
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
-
-    /* ===== Compteurs animés (hero) ===== */
-    const counterIO = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (!entry.isIntersecting) return;
-        const el = entry.target;
-        counterIO.unobserve(el);
-        const target = parseFloat(el.dataset.counter);
-        const decimals = parseInt(el.dataset.decimals || '0', 10);
-        const duration = 1600;
-        const start = performance.now();
-        const tick = (now) => {
-          const p = Math.min((now - start) / duration, 1);
-          const eased = 1 - Math.pow(1 - p, 3);
-          el.textContent = (target * eased).toFixed(decimals);
-          if (p < 1) requestAnimationFrame(tick);
-        };
-        requestAnimationFrame(tick);
-      });
-    }, { threshold: 0.5 });
-    document.querySelectorAll('[data-counter]').forEach((el) => counterIO.observe(el));
 
     /* ===== Comparateurs Avant / Après ===== */
     document.querySelectorAll('.ba-range').forEach((range) => {
