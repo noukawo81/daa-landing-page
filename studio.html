@@ -33,6 +33,7 @@
     .scroller::-webkit-scrollbar { display: none; }
     :focus-visible { outline:3px solid #F59E0B; outline-offset:2px; }
   </style>
+  <link rel="stylesheet" href="assets/site.css">
 </head>
 <body class="bg-slate-50 text-navy font-sans min-h-screen flex flex-col selection:bg-emerald selection:text-white">
 
@@ -308,7 +309,7 @@
       <div class="text-center mb-5">
         <div class="w-12 h-12 rounded-full bg-gold/15 text-gold-deep flex items-center justify-center mx-auto mb-2 text-xl"><svg class="w-4 h-4 inline-block align-[-2px]" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true"><path d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v1H8a1 1 0 000 2h1v2H8a1 1 0 100 2h1v1a1 1 0 102 0v-1h1a1 1 0 100-2h-1V9h1a1 1 0 100-2h-1V6z"/></svg></div>
         <h3 id="modal-title" class="text-lg font-extrabold">Recharger vos crédits</h3>
-        <p class="text-sm text-slate-500 mt-1">Chaque visuel coûte 1 crédit.</p>
+        <p class="text-sm text-slate-500 mt-1">Photo : 1 crédit · Description : 2 crédits · Vidéo : 5 crédits</p>
       </div>
 
       <div class="space-y-3 text-sm mb-5">
@@ -334,10 +335,12 @@
     </div>
   </div>
 
+  <script src="assets/site-config.js"></script>
   <script>
     const WHATSAPP_NUMBER = '2250544188155'; // numéro DAA (support)
     const FREE_CREDITS = 5;
     const KEY = 'daa_studio_credits';
+    const CREDIT_COSTS = window.DAASiteConfig.creditCosts;
     const $ = id => document.getElementById(id);
 
     // Appel serveur : POST /api/generate  { productName, prompt, imageBase64, mode }
@@ -714,7 +717,8 @@
     // ---------- Génération ----------
     function launchGeneration() {
       if (busy || currentTab === 'video') return;
-      if (userCredits <= 0) { showError('Vos crédits sont épuisés. Rechargez avec le bouton ⚡ en haut à droite.', true); nudgeRecharge(); return; }
+      const creditCost = currentTab === 'photo' ? CREDIT_COSTS.photo : CREDIT_COSTS.description;
+      if (userCredits < creditCost) { showError('Cette création nécessite ' + creditCost + ' crédits. Rechargez avec le bouton ⚡ en haut à droite.', true); nudgeRecharge(); return; }
       showError('');
 
       const fromPhoto = currentTab === 'photo';
@@ -726,7 +730,7 @@
       const decor = DECOR_LABELS[document.querySelector('input[name="decor"]:checked').value];
       const promptText = [text, 'Décor souhaité : ' + decor].filter(Boolean).join('. ');
       const productName = text.split(/[,.:\n]/)[0].trim().slice(0, 60) || 'Produit';
-      runGeneration(productName, promptText, fromPhoto ? photoToBase64(uploadedImage) : '', selectedMode, text);
+      runGeneration(productName, promptText, fromPhoto ? photoToBase64(uploadedImage) : '', selectedMode, text, creditCost);
     }
 
     function thumbOf(canvas) {
@@ -736,7 +740,7 @@
       return c.toDataURL('image/jpeg', 0.7);
     }
 
-    async function runGeneration(productName, promptText, base64Data, mode, userText) {
+    async function runGeneration(productName, promptText, base64Data, mode, userText, creditCost) {
       busy = true;
       const btn = $('btn-generate');
       btn.disabled = true;
@@ -758,7 +762,7 @@
           showError(data.notice || 'Service momentanément saturé : aucun crédit n’est débité.', true);
         } else {
           // Le crédit n'est débité qu'une fois le résultat réellement transformé
-          userCredits--; saveCredits(); updateCreditsUI();
+          userCredits -= creditCost; saveCredits(); updateCreditsUI();
           doneLabel = data.image ? 'Visuel prêt' : 'Fiche prête';
           if (data.image) {
             library.unshift({ full: $('studio-canvas').toDataURL('image/jpeg', 0.9), thumb: thumbOf($('studio-canvas')) });
