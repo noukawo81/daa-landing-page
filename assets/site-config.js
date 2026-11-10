@@ -1,5 +1,8 @@
 (function (global) {
+  const LAUNCH_END_LABEL = '31 décembre 2026';
+
   global.DAASiteConfig = Object.freeze({
+    LAUNCH_END_LABEL,
     whatsapp: Object.freeze({
       number: '2250544188155',
       baseUrl: 'https://wa.me/2250544188155',
@@ -44,25 +47,24 @@
       }),
       packs: Object.freeze({ depart: 30000, pro: 60000, empire: 150000 }),
       corporate: 'Sur devis',
-      subscriptionLaunchDeadline: '[DATE À COMPLÉTER]',
       subscriptions: Object.freeze([
         Object.freeze({
           name: 'Contenu Starter',
-          features: Object.freeze(['4 visuels', '4 textes de vente', 'Calendrier éditorial']),
+          features: Object.freeze(['4 visuels professionnels', '4 textes de vente', 'Calendrier éditorial mensuel']),
           launchPrice: 20000,
           normalPrice: 35000,
           period: 'mois'
         }),
         Object.freeze({
           name: 'Contenu Standard',
-          features: Object.freeze(['8 visuels', '1 vidéo courte', 'Calendrier éditorial']),
+          features: Object.freeze(['8 visuels professionnels', '8 textes de vente', '1 vidéo courte promotionnelle', 'Calendrier éditorial mensuel']),
           launchPrice: 45000,
           normalPrice: 75000,
           period: 'mois'
         }),
         Object.freeze({
           name: 'Contenu Pro',
-          features: Object.freeze(['12 visuels', '2 vidéos']),
+          features: Object.freeze(['12 visuels professionnels', '12 textes de vente', '2 vidéos promotionnelles', 'Calendrier éditorial mensuel']),
           launchPrice: 90000,
           normalPrice: 150000,
           period: 'mois'
@@ -72,16 +74,14 @@
           features: Object.freeze(['Corrections', 'Mises à jour']),
           launchPrice: 10000,
           normalPrice: 15000,
-          period: null,
-          periodicity: '[À COMPLÉTER]'
+          period: 'mois'
         }),
         Object.freeze({
           name: 'Suivi Agent IA+',
           features: Object.freeze(['Modifications du catalogue', 'Rapport mensuel']),
           launchPrice: 20000,
           normalPrice: 30000,
-          period: null,
-          periodicity: '[À COMPLÉTER]'
+          period: 'mois'
         })
       ]),
       studioCreditPacks: Object.freeze({

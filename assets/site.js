@@ -76,7 +76,7 @@
     const subscriptions = Array.isArray(prices.subscriptions) ? prices.subscriptions : [];
     const money = new Intl.NumberFormat('fr-FR');
     grid.replaceChildren();
-    if (deadline) deadline.textContent = prices.subscriptionLaunchDeadline;
+    if (deadline) deadline.textContent = config.LAUNCH_END_LABEL;
 
     subscriptions.forEach((subscription) => {
       const card = document.createElement('article');
@@ -101,34 +101,35 @@
       });
       card.appendChild(features);
 
-      const period = subscription.period ? '/' + subscription.period : '';
-      const launch = document.createElement('p');
-      launch.className = 'mt-5 text-sm text-slate-500';
-      const launchLabel = document.createElement('span');
-      launchLabel.textContent = 'Prix de lancement : ';
-      const launchPrice = document.createElement('s');
-      launchPrice.textContent = money.format(subscription.launchPrice) + ' ' + prices.currency + period;
-      launch.append(launchLabel, launchPrice);
-      card.appendChild(launch);
-
+      const period = '/' + subscription.period;
+      const normalPriceText = money.format(subscription.normalPrice) + ' ' + prices.currency + period;
       const normal = document.createElement('p');
-      normal.className = 'daa-price mt-1 text-lg';
-      normal.textContent = 'Prix normal : ' + money.format(subscription.normalPrice) + ' ' + prices.currency + period;
+      normal.className = 'mt-4 text-sm text-slate-600';
+      const normalAccessible = document.createElement('span');
+      normalAccessible.className = 'sr-only';
+      normalAccessible.textContent = 'Prix normal prévu : ' + normalPriceText;
+      const normalVisual = document.createElement('s');
+      normalVisual.setAttribute('aria-hidden', 'true');
+      normalVisual.textContent = 'Prix normal prévu : ' + normalPriceText;
+      normal.append(normalAccessible, normalVisual);
       card.appendChild(normal);
 
-      if (subscription.periodicity) {
-        const periodicity = document.createElement('p');
-        periodicity.className = 'mt-1 text-xs text-slate-500';
-        periodicity.textContent = 'Périodicité : ' + subscription.periodicity;
-        card.appendChild(periodicity);
-      }
+      const launchLabel = document.createElement('p');
+      launchLabel.className = 'mt-4 text-xs font-semibold text-slate-600';
+      launchLabel.textContent = 'Prix de lancement';
+      card.appendChild(launchLabel);
+
+      const launchPrice = document.createElement('p');
+      launchPrice.className = 'mt-1 text-3xl font-black text-primary';
+      launchPrice.textContent = money.format(subscription.launchPrice) + ' ' + prices.currency + period;
+      card.appendChild(launchPrice);
 
       const expiry = document.createElement('p');
-      expiry.className = 'mt-2 text-xs text-slate-500';
-      expiry.textContent = 'Prix de lancement jusqu’au ' + prices.subscriptionLaunchDeadline;
+      expiry.className = 'mt-3 text-sm text-slate-600';
+      expiry.textContent = 'Tarif de lancement pour tout abonnement souscrit avant le ' + config.LAUNCH_END_LABEL;
       card.appendChild(expiry);
 
-      const message = 'Bonjour DAA, je souhaite souscrire à l’offre ' + subscription.name + ' au prix de lancement de ' + money.format(subscription.launchPrice) + ' ' + prices.currency + '.';
+      const message = 'Bonjour DAA, je souhaite souscrire à l’offre ' + subscription.name + ' au prix de lancement de ' + money.format(subscription.launchPrice) + ' ' + prices.currency + period + '.';
       const order = document.createElement('a');
       order.className = 'daa-button-primary mt-5 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition';
       order.href = config.whatsapp.baseUrl + '?text=' + encodeURIComponent(message);
