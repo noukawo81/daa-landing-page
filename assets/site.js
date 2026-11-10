@@ -66,6 +66,81 @@
     });
   }
 
+  function renderSubscriptions() {
+    const config = global.DAASiteConfig;
+    const grid = document.getElementById('subscription-grid');
+    const deadline = document.getElementById('subscription-deadline');
+    if (!config || !grid) return;
+
+    const prices = config.prices;
+    const subscriptions = Array.isArray(prices.subscriptions) ? prices.subscriptions : [];
+    const money = new Intl.NumberFormat('fr-FR');
+    grid.replaceChildren();
+    if (deadline) deadline.textContent = prices.subscriptionLaunchDeadline;
+
+    subscriptions.forEach((subscription) => {
+      const card = document.createElement('article');
+      card.className = 'daa-card flex flex-col p-6';
+
+      const title = document.createElement('h3');
+      title.className = 'text-xl font-extrabold text-night';
+      title.textContent = subscription.name;
+      card.appendChild(title);
+
+      const features = document.createElement('ul');
+      features.className = 'mt-4 flex-1 space-y-2 text-sm text-slate-600';
+      subscription.features.forEach((feature) => {
+        const item = document.createElement('li');
+        item.className = 'flex items-start gap-2';
+        const marker = document.createElement('span');
+        marker.className = 'font-bold text-primary';
+        marker.setAttribute('aria-hidden', 'true');
+        marker.textContent = '✓';
+        item.append(marker, document.createTextNode(feature));
+        features.appendChild(item);
+      });
+      card.appendChild(features);
+
+      const period = subscription.period ? '/' + subscription.period : '';
+      const launch = document.createElement('p');
+      launch.className = 'mt-5 text-sm text-slate-500';
+      const launchLabel = document.createElement('span');
+      launchLabel.textContent = 'Prix de lancement : ';
+      const launchPrice = document.createElement('s');
+      launchPrice.textContent = money.format(subscription.launchPrice) + ' ' + prices.currency + period;
+      launch.append(launchLabel, launchPrice);
+      card.appendChild(launch);
+
+      const normal = document.createElement('p');
+      normal.className = 'daa-price mt-1 text-lg';
+      normal.textContent = 'Prix normal : ' + money.format(subscription.normalPrice) + ' ' + prices.currency + period;
+      card.appendChild(normal);
+
+      if (subscription.periodicity) {
+        const periodicity = document.createElement('p');
+        periodicity.className = 'mt-1 text-xs text-slate-500';
+        periodicity.textContent = 'Périodicité : ' + subscription.periodicity;
+        card.appendChild(periodicity);
+      }
+
+      const expiry = document.createElement('p');
+      expiry.className = 'mt-2 text-xs text-slate-500';
+      expiry.textContent = 'Prix de lancement jusqu’au ' + prices.subscriptionLaunchDeadline;
+      card.appendChild(expiry);
+
+      const message = 'Bonjour DAA, je souhaite souscrire à l’offre ' + subscription.name + ' au prix de lancement de ' + money.format(subscription.launchPrice) + ' ' + prices.currency + '.';
+      const order = document.createElement('a');
+      order.className = 'daa-button-primary mt-5 inline-flex items-center justify-center gap-2 rounded-xl px-4 py-3 text-sm font-bold transition';
+      order.href = config.whatsapp.baseUrl + '?text=' + encodeURIComponent(message);
+      order.target = '_blank';
+      order.rel = 'noopener noreferrer';
+      order.textContent = 'Choisir cet abonnement';
+      order.setAttribute('aria-label', 'Choisir ' + subscription.name + ' sur WhatsApp');
+      card.appendChild(order);
+      grid.appendChild(card);
+    });
+  }
+
   function renderShell() {
     const config = global.DAASiteConfig;
     const headerMount = document.querySelector('[data-site-header]');
@@ -141,11 +216,12 @@
 
   function initialize() {
     renderTestimonials();
+    renderSubscriptions();
     renderShell();
     initializeGallery();
   }
 
-  global.DAASite = Object.freeze({ initialize, renderTestimonials, renderShell });
+  global.DAASite = Object.freeze({ initialize, renderTestimonials, renderSubscriptions, renderShell });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initialize, { once: true });

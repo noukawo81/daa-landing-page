@@ -89,9 +89,9 @@
       <div class="card p-3 sm:p-4">
         <h2 class="font-bold text-sm text-slate-900 mb-2">2. Votre création</h2>
         <div id="tablist" class="grid grid-cols-3 gap-2" role="tablist" aria-label="Mode de création">
-          <button type="button" role="tab" id="tab-photo" aria-selected="false" aria-controls="stage" onclick="setTab('photo')" class="relative px-2 py-2 rounded-xl border-2 text-center text-xs sm:text-sm font-bold leading-tight transition border-slate-200">📸 Photo Produit</button>
-          <button type="button" role="tab" id="tab-text" aria-selected="false" aria-controls="stage" onclick="setTab('text')" class="relative px-2 py-2 rounded-xl border-2 text-center text-xs sm:text-sm font-bold leading-tight transition border-slate-200">📝 Description Texte</button>
-          <button type="button" role="tab" id="tab-video" aria-selected="false" aria-controls="stage" onclick="setTab('video')" class="relative px-2 py-2 rounded-xl border-2 text-center text-xs sm:text-sm font-bold leading-tight transition border-slate-200"><span class="absolute -top-2 right-1 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-gradient-to-r from-gold to-gold-deep text-navy shadow-sm">Bientôt</span>🎬 Vidéo Promo IA</button>
+          <button type="button" role="tab" id="tab-photo" aria-selected="false" aria-controls="stage" onclick="setTab('photo')" class="relative px-2 py-2 rounded-xl border-2 text-center text-xs sm:text-sm font-bold leading-tight transition border-slate-200">📸 Photo Produit · <span id="photo-cost-label">1 crédit</span></button>
+          <button type="button" role="tab" id="tab-text" aria-selected="false" aria-controls="stage" onclick="setTab('text')" class="relative px-2 py-2 rounded-xl border-2 text-center text-xs sm:text-sm font-bold leading-tight transition border-slate-200">📝 Description Texte · <span id="text-cost-label">2 crédits</span></button>
+          <button type="button" role="tab" id="tab-video" aria-selected="false" aria-controls="stage" onclick="setTab('video')" class="relative px-2 py-2 rounded-xl border-2 text-center text-xs sm:text-sm font-bold leading-tight transition border-slate-200"><span class="absolute -top-2 right-1 text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-gradient-to-r from-gold to-gold-deep text-navy shadow-sm">Bientôt</span>🎬 Vidéo Promo IA · <span id="video-cost-label">5 crédits</span></button>
         </div>
       </div>
 
@@ -229,7 +229,10 @@
         <span id="bar-photo-label" class="text-xs font-medium text-slate-600"></span>
       </div>
       <div id="chips" class="flex gap-2 overflow-x-auto scroller mb-2" aria-label="Suggestions rapides"></div>
-      <p id="form-error" class="hidden text-xs font-medium text-red-600 mb-2" role="alert"></p>
+      <div id="form-error" class="hidden flex flex-wrap items-center gap-x-3 gap-y-2 text-xs font-medium text-red-600 mb-2" role="alert">
+        <span id="form-error-message"></span>
+        <button type="button" id="form-error-recharge" onclick="openRechargeModal()" class="hidden rounded-lg bg-gold px-3 py-1.5 font-bold text-slate-950 hover:brightness-110 transition">Recharger</button>
+      </div>
       <p id="note-prompt-bar" class="hidden text-xs text-slate-500 mb-2" role="status"></p>
 
       <div data-field class="relative flex items-end gap-1 bg-white border border-slate-300 focus-within:border-emerald rounded-3xl shadow-lg px-1.5 py-1.5">
@@ -299,6 +302,7 @@
           <ul id="history-list" class="space-y-2"></ul>
         </div>
       </details>
+      <a href="index.html" class="flex items-center gap-2 px-3 py-3 rounded-xl border border-slate-200 text-slate-700 text-sm font-bold hover:bg-slate-50 transition"><svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 18l-6-6 6-6M9 12h12"/></svg><span>Retour au site</span></a>
       <a href="https://wa.me/2250544188155?text=Bonjour%20l%27%C3%A9quipe%20DAA%2C%20j%27utilise%20le%20Studio%20IA%20et%20j%27ai%20besoin%20d%27assistance%20technique." target="_blank" rel="noopener noreferrer" class="flex items-center gap-2 px-3 py-3 rounded-xl bg-emerald hover:bg-emerald-dark text-white text-sm font-bold transition"><svg class="w-4 h-4 shrink-0" viewBox="0 0 448 512" fill="currentColor" aria-hidden="true"><path d="M380.9 97.1C339 55.1 283.2 32 223.9 32c-122.4 0-222 99.6-222 222 0 39.1 10.2 77.3 29.6 111L0 480l117.7-30.9c32.4 17.7 68.9 27 106.1 27h.1c122.3 0 224.1-99.6 224.1-222 0-59.3-25.2-115-67.1-157zm-157 341.6c-33.2 0-65.7-8.9-94-25.7l-6.7-4-69.8 18.3L72 359.2l-4.4-7c-18.5-29.4-28.2-63.3-28.2-98.2 0-101.7 82.8-184.5 184.6-184.5 49.3 0 95.6 19.2 130.4 54.1 34.8 34.9 56.2 81.2 56.1 130.5 0 101.8-84.9 184.6-186.6 184.6zm101.2-138.2c-5.5-2.8-32.8-16.2-37.9-18-5.1-1.9-8.8-2.8-12.5 2.8-3.7 5.6-14.3 18-17.6 21.8-3.2 3.7-6.5 4.2-12 1.4-32.6-16.3-54-29.1-75.5-66-5.7-9.8 5.7-9.1 16.3-30.3 1.8-3.7.9-6.9-.5-9.7-1.4-2.8-12.5-30.1-17.1-41.2-4.5-10.8-9.1-9.3-12.5-9.5-3.2-.2-6.9-.2-10.6-.2-3.7 0-9.7 1.4-14.8 6.9-5.1 5.6-19.4 19-19.4 46.3 0 27.3 19.9 53.7 22.6 57.4 2.8 3.7 39.1 59.7 94.8 83.8 35.2 15.2 49 16.5 66.6 13.9 10.7-1.6 32.8-13.4 37.4-26.4 4.6-13 4.6-24.1 3.2-26.4-1.3-2.5-5-3.9-10.5-6.6z"/></svg> <span>Assistance DAA sur WhatsApp</span></a>
     </div>
   </aside>
@@ -404,6 +408,12 @@
 
     function updateCreditsUI() {
       $('credits-badge').textContent = userCredits + (userCredits > 1 ? ' crédits' : ' crédit');
+    }
+
+    function updateCreditCostLabels() {
+      $('photo-cost-label').textContent = CREDIT_COSTS.photo + (CREDIT_COSTS.photo > 1 ? ' crédits' : ' crédit');
+      $('text-cost-label').textContent = CREDIT_COSTS.description + (CREDIT_COSTS.description > 1 ? ' crédits' : ' crédit');
+      $('video-cost-label').textContent = CREDIT_COSTS.video + ' crédits';
     }
 
     function nudgeRecharge() {
@@ -564,9 +574,10 @@
       zone.addEventListener('drop', e => { const f = e.dataTransfer.files[0]; if (f) loadPicked(f); });
     })();
 
-    function showError(msg, info) {
+    function showError(msg, info, canRecharge) {
       const el = document.getElementById('form-error');
-      el.textContent = msg || '';
+      document.getElementById('form-error-message').textContent = msg || '';
+      document.getElementById('form-error-recharge').classList.toggle('hidden', !canRecharge);
       el.classList.toggle('hidden', !msg);
       el.classList.toggle('text-red-600', !info);
       el.classList.toggle('text-amber-700', !!info);
@@ -718,7 +729,7 @@
     function launchGeneration() {
       if (busy || currentTab === 'video') return;
       const creditCost = currentTab === 'photo' ? CREDIT_COSTS.photo : CREDIT_COSTS.description;
-      if (userCredits < creditCost) { showError('Cette création nécessite ' + creditCost + ' crédits. Rechargez avec le bouton ⚡ en haut à droite.', true); nudgeRecharge(); return; }
+      if (userCredits < creditCost) { showError('Cette création nécessite ' + creditCost + ' crédits.', true, true); nudgeRecharge(); return; }
       showError('');
 
       const fromPhoto = currentTab === 'photo';
@@ -958,6 +969,7 @@
     
 
     updateCreditsUI();
+    updateCreditCostLabels();
     setMode('artisan');
     setTab('photo');
     setSelectedMode('packaging');

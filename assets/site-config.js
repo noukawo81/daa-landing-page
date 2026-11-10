@@ -44,6 +44,46 @@
       }),
       packs: Object.freeze({ depart: 30000, pro: 60000, empire: 150000 }),
       corporate: 'Sur devis',
+      subscriptionLaunchDeadline: '[DATE À COMPLÉTER]',
+      subscriptions: Object.freeze([
+        Object.freeze({
+          name: 'Contenu Starter',
+          features: Object.freeze(['4 visuels', '4 textes de vente', 'Calendrier éditorial']),
+          launchPrice: 20000,
+          normalPrice: 35000,
+          period: 'mois'
+        }),
+        Object.freeze({
+          name: 'Contenu Standard',
+          features: Object.freeze(['8 visuels', '1 vidéo courte', 'Calendrier éditorial']),
+          launchPrice: 45000,
+          normalPrice: 75000,
+          period: 'mois'
+        }),
+        Object.freeze({
+          name: 'Contenu Pro',
+          features: Object.freeze(['12 visuels', '2 vidéos']),
+          launchPrice: 90000,
+          normalPrice: 150000,
+          period: 'mois'
+        }),
+        Object.freeze({
+          name: 'Suivi Agent IA',
+          features: Object.freeze(['Corrections', 'Mises à jour']),
+          launchPrice: 10000,
+          normalPrice: 15000,
+          period: null,
+          periodicity: '[À COMPLÉTER]'
+        }),
+        Object.freeze({
+          name: 'Suivi Agent IA+',
+          features: Object.freeze(['Modifications du catalogue', 'Rapport mensuel']),
+          launchPrice: 20000,
+          normalPrice: 30000,
+          period: null,
+          periodicity: '[À COMPLÉTER]'
+        })
+      ]),
       studioCreditPacks: Object.freeze({
         decouverte: Object.freeze({ credits: 20, price: 3000 }),
         pro: Object.freeze({ credits: 100, price: 10000 }),
