@@ -156,7 +156,7 @@
             <nav class="flex flex-wrap items-center justify-end gap-x-5 gap-y-2 text-sm font-semibold" aria-label="Navigation principale">
               <a href="index.html#services" class="hover:text-amber-300">Services</a>
               <a href="index.html#packs" class="hover:text-amber-300">Packs</a>
-              <a href="index.html#bourse-vip" class="hover:text-amber-300">Académie</a>
+              <a href="academie.html" class="hover:text-amber-300">Académie</a>
             </nav>
           </div>
         </header>`;
@@ -165,12 +165,32 @@
     if (footerMount) {
       footerMount.innerHTML = `
         <footer class="bg-night text-white">
-          <div class="mx-auto flex max-w-7xl flex-col gap-3 px-5 py-8 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-8">
+          <div class="mx-auto flex max-w-7xl flex-col gap-4 px-5 py-8 text-sm sm:flex-row sm:items-center sm:justify-between sm:px-8">
             <span class="font-bold">Digital Artisans Academy · Abidjan</span>
+            <nav class="flex flex-wrap gap-x-4 gap-y-2" aria-label="Informations légales">
+              <a href="mentions-legales.html" class="text-slate-300 hover:text-white">Mentions légales</a>
+              <a href="confidentialite.html" class="text-slate-300 hover:text-white">Confidentialité</a>
+            </nav>
             <a href="${config.whatsapp.links.direct}" class="font-semibold text-emerald-300 hover:text-white">Contacter DAA</a>
           </div>
         </footer>`;
     }
+  }
+
+  function renderAcademyLinks() {
+    const config = global.DAASiteConfig;
+    if (!config) return;
+
+    const date = document.getElementById('academy-launch-date');
+    if (date) date.textContent = config.LAUNCH_END_LABEL;
+
+    document.querySelectorAll('[data-academy-reservation]').forEach((link) => {
+      const formation = link.dataset.academyReservation;
+      const message = config.whatsapp.messages.academyReservation.replace('{formation}', formation);
+      link.href = config.whatsapp.baseUrl + '?text=' + encodeURIComponent(message);
+      link.target = '_blank';
+      link.rel = 'noopener noreferrer';
+    });
   }
 
   function initializeGallery() {
@@ -219,10 +239,11 @@
     renderTestimonials();
     renderSubscriptions();
     renderShell();
+    renderAcademyLinks();
     initializeGallery();
   }
 
-  global.DAASite = Object.freeze({ initialize, renderTestimonials, renderSubscriptions, renderShell });
+  global.DAASite = Object.freeze({ initialize, renderTestimonials, renderSubscriptions, renderShell, renderAcademyLinks });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', initialize, { once: true });

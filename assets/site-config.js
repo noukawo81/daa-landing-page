@@ -18,7 +18,8 @@
       messages: Object.freeze({
         order: 'Bonjour DAA, je souhaite commander le produit : {produit} au prix de {prix} FCFA',
         diagnostic: "Bonjour DAA, je souhaite bénéficier d'un diagnostic digital gratuit.",
-        videoNotice: 'Bonjour Digital Artisans Academy ! Prévenez-moi dès le lancement de la Vidéo Promo IA (V2) du Studio DAA.'
+        videoNotice: 'Bonjour Digital Artisans Academy ! Prévenez-moi dès le lancement de la Vidéo Promo IA (V2) du Studio DAA.',
+        academyReservation: 'Bonjour DAA, je souhaite réserver la formation « {formation} ». Merci de me communiquer les prochaines modalités.'
       })
     }),
     creditCosts: Object.freeze({
