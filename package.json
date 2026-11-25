@@ -1,0 +1,12 @@
+{
+  "name": "digital-artisans-academy",
+  "private": true,
+  "scripts": {
+    "build:css": "tailwindcss -i ./assets/tailwind.input.css -o ./assets/tailwind.css --minify",
+    "build:img": "node ./scripts/build-images.js"
+  },
+  "devDependencies": {
+    "sharp": "^0.33.5",
+    "tailwindcss": "^3.4.17"
+  }
+}

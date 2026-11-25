@@ -257,4 +257,4 @@ module.exports = async function handler(req, res) {
     out.notice = 'Le service de rédaction est momentanément saturé : voici un texte modèle à compléter. Aucun crédit n’est débité, réessayez dans quelques minutes.';
   }
   return res.status(200).json(out);
-};
+}; 
